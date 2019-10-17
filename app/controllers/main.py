@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QObject, pyqtSlot
-
+from PyQt5.QtCore import QObject, pyqtSlot, QDir, QCoreApplication
+from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog)
 
 class MainController(QObject):
     def __init__(self, model):
@@ -16,3 +16,10 @@ class MainController(QObject):
 
         # calculate button enabled state
         self._model.enable_reset = True if value else False
+
+    def loadDirectory(self):
+      dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
+      print(dir)
+
+    def exitApplication(self):
+        QCoreApplication.instance().quit()

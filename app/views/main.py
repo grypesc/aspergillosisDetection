@@ -15,7 +15,8 @@ class MainView(QMainWindow):
         # connect widgets to controller
         self._ui.spinBox_amount.valueChanged.connect(self._main_controller.change_amount)
         self._ui.pushButton_reset.clicked.connect(lambda: self._main_controller.change_amount(0))
-
+        self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
+        self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
         # listen for model event signals
         self._model.amount_changed.connect(self.on_amount_changed)
         self._model.even_odd_changed.connect(self.on_even_odd_changed)

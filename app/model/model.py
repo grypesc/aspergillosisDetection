@@ -5,6 +5,7 @@ class Model(QObject):
     amount_changed = pyqtSignal(int)
     even_odd_changed = pyqtSignal(str)
     enable_reset_changed = pyqtSignal(bool)
+    imagesDirectory = pyqtSignal(str)
 
     @property
     def amount(self):
@@ -35,7 +36,7 @@ class Model(QObject):
 
     def __init__(self):
         super().__init__()
-
         self._amount = 0
         self._even_odd = ''
         self._enable_reset = False
+        self.imagesDirectory = ''
