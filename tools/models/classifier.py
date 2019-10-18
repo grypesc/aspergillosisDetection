@@ -11,9 +11,9 @@ from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 
 
-folderFungus = 'data/fungus'
-folderNoFungus = 'data/noFungus'
-folderNoLungs = 'data/noLungs'
+folderFungus = '../../data/fungus'
+folderNoFungus = '../../data/noFungus'
+folderNoLungs = '../../data/noLungs'
 
 fungusImages, noFungusImages = 0, 0
 for dirpath, subdirs, files in os.walk(folderFungus):
@@ -80,7 +80,7 @@ model = build(lr=lr, init= init, input_shape= input_shape)
 history = model.fit(trainX, trainY, validation_split=0.2,
                     epochs= epochs, batch_size= batch_size, verbose=2)
 
-model.save("app/resources/models/doubleConv.h5")
+model.save("../../app/resources/models/doubleConv.h5")
 
 print(history.history.keys())
 plt.plot(history.history['accuracy'])

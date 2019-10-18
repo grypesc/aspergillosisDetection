@@ -8,10 +8,10 @@ np.set_printoptions(threshold=sys.maxsize)
 from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
-folderFungus = 'data/fungus'
-folderNoFungus = 'data/noFungus'
-folderNoLungs = 'data/noLungs'
-folderTest = 'data/test'
+folderFungus = '../../data/fungus'
+folderNoFungus = '../../data/noFungus'
+folderNoLungs = '../../data/noLungs'
+folderTest = '../../data/test'
 
 fungusImages, noFungusImages = 0, 0
 for dirpath, subdirs, files in os.walk(folderTest):
@@ -31,7 +31,7 @@ testX /= 2048
 testY = np.ones(testX.shape[0])
 testY = to_categorical(testY, num_classes= 2)
 
-model = load_model('models/doubleConv.h5')
+model = load_model('../../app/resources/models/example.h5')
 yPredictions = model.predict(x=testX, batch_size=32, verbose=1)
 print(yPredictions)
 accuracy = np.sum(yPredictions[:,1])/fungusImages
