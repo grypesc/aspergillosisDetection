@@ -2,4 +2,4 @@ Start Qty designer:
 qtchooser -run-tool=designer -qt=5 &
 
 Convert xml to ui.py
-pyuic5 views/main.xml -o views\main_ui.py
+pyuic5 views/main.xml -o views/main_ui.py

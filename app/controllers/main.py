@@ -19,7 +19,7 @@ class MainController(QObject):
 
     def loadDirectory(self):
       dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
-      print(dir)
+      self._model.imagesDirectory = dir
 
     def exitApplication(self):
         QCoreApplication.instance().quit()

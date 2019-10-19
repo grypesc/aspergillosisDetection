@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtCore import pyqtSlot
 from views.main_ui import Ui_MainWindow
 
@@ -21,6 +21,7 @@ class MainView(QMainWindow):
         self._model.amount_changed.connect(self.on_amount_changed)
         self._model.even_odd_changed.connect(self.on_even_odd_changed)
         self._model.enable_reset_changed.connect(self.on_enable_reset_changed)
+        self._model.imagesDirectorySignal.connect(self.onImagesDirectoryChanged)
 
         # set a default value
         self._main_controller.change_amount(42)
@@ -36,3 +37,8 @@ class MainView(QMainWindow):
     @pyqtSlot(bool)
     def on_enable_reset_changed(self, value):
         self._ui.pushButton_reset.setEnabled(value)
+
+    @pyqtSlot(str)
+    def onImagesDirectoryChanged(self, value):
+        print(value)
+        self._ui.tableWidget.setItem(1,1, QTableWidgetItem(value)).setText("Asd")

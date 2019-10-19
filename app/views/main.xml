@@ -6,36 +6,73 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>417</height>
+    <width>800</width>
+    <height>666</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QSpinBox" name="spinBox_amount"/>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QTableWidget" name="tableWidget">
+        <property name="rowCount">
+         <number>10</number>
+        </property>
+        <property name="columnCount">
+         <number>3</number>
+        </property>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_reset">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>lol</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_even_odd"/>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QPushButton" name="pushButton_reset">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>lol</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_amount"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_even_odd"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>582</width>
+     <width>800</width>
      <height>22</height>
     </rect>
    </property>
@@ -48,6 +85,7 @@
    </widget>
    <addaction name="menuFiles"/>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_directory">
    <property name="text">
     <string>Load directory</string>

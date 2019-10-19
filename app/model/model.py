@@ -5,7 +5,7 @@ class Model(QObject):
     amount_changed = pyqtSignal(int)
     even_odd_changed = pyqtSignal(str)
     enable_reset_changed = pyqtSignal(bool)
-    imagesDirectory = pyqtSignal(str)
+    imagesDirectorySignal = pyqtSignal(str)
 
     @property
     def amount(self):
@@ -40,3 +40,12 @@ class Model(QObject):
         self._even_odd = ''
         self._enable_reset = False
         self.imagesDirectory = ''
+
+    @property
+    def imagesDirectory(self):
+        return self._imagesDirectory
+
+    @amount.setter
+    def imagesDirectory(self, value):
+        self._imagesDirectory = value
+        self.imagesDirectorySignal.emit(value)
