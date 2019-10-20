@@ -22,6 +22,7 @@ class MainView(QMainWindow):
         self._model.even_odd_changed.connect(self.on_even_odd_changed)
         self._model.enable_reset_changed.connect(self.on_enable_reset_changed)
         self._model.imagesDirectorySignal.connect(self.onImagesDirectoryChanged)
+        self._model.imagesPathsSignal.connect(self.onImagesPathsChanged)
 
         # set a default value
         self._main_controller.change_amount(42)
@@ -40,5 +41,11 @@ class MainView(QMainWindow):
 
     @pyqtSlot(str)
     def onImagesDirectoryChanged(self, value):
-        print(value)
-        self._ui.tableWidget.setItem(1,1, QTableWidgetItem(value)).setText("Asd")
+        print (value)
+
+
+    def onImagesPathsChanged(self, value):
+        self._ui.tableWidget.setRowCount(len(self._model.imagesPaths))
+        for index, filePath in enumerate(self._model.imagesPaths, start=0):
+            self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(filePath))
+        self._main_controller.evaluateImages()

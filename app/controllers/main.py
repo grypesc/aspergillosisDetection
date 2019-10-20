@@ -1,10 +1,10 @@
+import os
 from PyQt5.QtCore import QObject, pyqtSlot, QDir, QCoreApplication
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog)
 
 class MainController(QObject):
     def __init__(self, model):
         super().__init__()
-
         self._model = model
 
     @pyqtSlot(int)
@@ -18,8 +18,17 @@ class MainController(QObject):
         self._model.enable_reset = True if value else False
 
     def loadDirectory(self):
-      dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
-      self._model.imagesDirectory = dir
+        dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
+        self._model.imagesDirectory = dir
+        newFiles = []
+        for dirpath, subdirs, files in os.walk(dir):
+            dirPathRelative = dirpath.replace(dir, "")
+            dirPathRelative = dirPathRelative.strip(os.sep)
+            newFiles.extend([os.path.join(dirPathRelative, file) for file in files])
+        self._model.imagesPaths = newFiles
+
+    def evaluateImages(self):
+        self._model.evaluateImages()
 
     def exitApplication(self):
         QCoreApplication.instance().quit()

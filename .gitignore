@@ -198,6 +198,9 @@ dmypy.json
 # Data folder full of lovely images
 data
 
+#Auto generated ui files
+app/views/main_ui.py
+
 # Ignore all models except the 'examply' one
 app/resources/models/*
 !app/resources/models/example.h5
