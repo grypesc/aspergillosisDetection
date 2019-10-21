@@ -13,47 +13,17 @@ class MainView(QMainWindow):
         self._ui.setupUi(self)
 
         # connect widgets to controller
-        self._ui.spinBox_amount.valueChanged.connect(self._main_controller.change_amount)
-        self._ui.pushButton_reset.clicked.connect(lambda: self._main_controller.change_amount(0))
         self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
         self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
         # listen for model event signals
-        self._model.amount_changed.connect(self.on_amount_changed)
-        self._model.even_odd_changed.connect(self.on_even_odd_changed)
-        self._model.enable_reset_changed.connect(self.on_enable_reset_changed)
-        self._model.imagesDirectorySignal.connect(self.onImagesDirectoryChanged)
-        self._model.imagesPathsSignal.connect(self.onImagesPathsChanged)
-        self._model.imagesPredictionSignal.connect(self.onImagesPredictionSignal)
-
-        # set a default value
-        self._main_controller.change_amount(42)
-
-    @pyqtSlot(int)
-    def on_amount_changed(self, value):
-        self._ui.spinBox_amount.setValue(value)
-
-    @pyqtSlot(str)
-    def on_even_odd_changed(self, value):
-        self._ui.label_even_odd.setText(value)
-
-    @pyqtSlot(bool)
-    def on_enable_reset_changed(self, value):
-        self._ui.pushButton_reset.setEnabled(value)
-
-    @pyqtSlot(str)
-    def onImagesDirectoryChanged(self, value):
-        print (value)
+        self._model.imagesReadySignal.connect(self.onImagesReady)
 
 
-    def onImagesPathsChanged(self, value):
-        self._ui.tableWidget.setRowCount(len(self._model.imagesPaths))
-        for index, filePath in enumerate(self._model.imagesPaths, start=0):
-            self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(filePath))
-        self._main_controller.evaluateImages()
-
-    def onImagesPredictionSignal(self, value):
-        imagesPrediction = self._model._imagesPrediction
-        for index in range (0, len(imagesPrediction)):
-            print(index, imagesPrediction)
-            self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(imagesPrediction[index]["diagnosis"]))
-            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(imagesPrediction[index]["probability"])))
+    def onImagesReady(self, value):
+        self._ui.tableWidget.setRowCount(len(self._model.images))
+        for index, image in enumerate(self._model.images, start=0):
+            self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(image.name))
+        images = self._model.images
+        for index in range (0, len(self._model.images)):
+            self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(images[index].diagnosis))
+            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(images[index].probability)))
