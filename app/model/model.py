@@ -7,7 +7,7 @@ np.set_printoptions(threshold=sys.maxsize)
 
 from keras.models import load_model
 from PyQt5.QtCore import QObject, pyqtSignal
-
+from .image_meta_data import ImageMetaData
 
 class Model(QObject):
     amount_changed = pyqtSignal(int)
@@ -15,6 +15,7 @@ class Model(QObject):
     enable_reset_changed = pyqtSignal(bool)
     imagesDirectorySignal = pyqtSignal(str)
     imagesPathsSignal = pyqtSignal(list)
+    imagesPredictionSignal = pyqtSignal(dict)
 
     @property
     def amount(self):
@@ -61,6 +62,15 @@ class Model(QObject):
         self._imagesPaths = value
         self.imagesPathsSignal.emit(value)
 
+    @property
+    def imagesPrediction(self):
+        return self._imagesPrediction
+
+    @imagesPrediction.setter
+    def imagesPrediction(self, value):
+        self._imagesPrediction = value
+        self.imagesPredictionSignal.emit(value)
+
     def __init__(self):
         super().__init__()
         self._amount = 0
@@ -68,18 +78,27 @@ class Model(QObject):
         self._enable_reset = False
         self.imagesDirectory = ''
         self._imagesPaths = ["a", "b"]
-        self.classifierName = 'example.h5'
+        self._imagesPrediction = {}
+        self._classifierName = 'example.h5'
+        self._imagesMetaData = []
 
     def evaluateImages(self):
         testX = np.zeros(shape=(len(self._imagesPaths),512, 512, 1), dtype = "float16")
         index = 0
         for path in self._imagesPaths:
-            testX[index] = pydicom.read_file(os.path.join(self.imagesDirectory, path)).pixel_array.reshape(512,512,1)
+            testX[index] = pydicom.read_file(os.path.join(self._imagesDirectory, path)).pixel_array[0].reshape(512,512,1)
             index+=1
 
         testX /= 2048
-        model = load_model(os.path.join('resources', 'models', self.classifierName))
+        model = load_model(os.path.join('resources', 'models', self._classifierName))
         yPredictions = model.predict(x=testX, batch_size=32, verbose=1)
-        print(yPredictions)
+
+        for index, prediction in enumerate(yPredictions, start=0):
+            if prediction[0] > 0.5:
+                self._imagesPrediction[index] = {"diagnosis": "Fungus", "probability": prediction[0]}
+            else:
+                self._imagesPrediction[index] = {"diagnosis": "No Fungus", "probability": prediction[1]}
+
         accuracy = np.sum(yPredictions[:,1])/len(self._imagesPaths)
-        print(accuracy)
+
+        self.imagesPredictionSignal.emit(self._imagesPrediction)

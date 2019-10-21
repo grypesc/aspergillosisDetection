@@ -24,7 +24,9 @@ class MainController(QObject):
         for dirpath, subdirs, files in os.walk(dir):
             dirPathRelative = dirpath.replace(dir, "")
             dirPathRelative = dirPathRelative.strip(os.sep)
-            newFiles.extend([os.path.join(dirPathRelative, file) for file in files])
+            for file in files:
+                if file.lower().endswith(".dcm"):
+                    newFiles.append(os.path.join(dirPathRelative, file))
         self._model.imagesPaths = newFiles
 
     def evaluateImages(self):

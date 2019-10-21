@@ -23,6 +23,7 @@ class MainView(QMainWindow):
         self._model.enable_reset_changed.connect(self.on_enable_reset_changed)
         self._model.imagesDirectorySignal.connect(self.onImagesDirectoryChanged)
         self._model.imagesPathsSignal.connect(self.onImagesPathsChanged)
+        self._model.imagesPredictionSignal.connect(self.onImagesPredictionSignal)
 
         # set a default value
         self._main_controller.change_amount(42)
@@ -49,3 +50,10 @@ class MainView(QMainWindow):
         for index, filePath in enumerate(self._model.imagesPaths, start=0):
             self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(filePath))
         self._main_controller.evaluateImages()
+
+    def onImagesPredictionSignal(self, value):
+        imagesPrediction = self._model._imagesPrediction
+        for index in range (0, len(imagesPrediction)):
+            print(index, imagesPrediction)
+            self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(imagesPrediction[index]["diagnosis"]))
+            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(imagesPrediction[index]["probability"])))
