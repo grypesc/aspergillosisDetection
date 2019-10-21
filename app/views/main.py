@@ -15,9 +15,10 @@ class MainView(QMainWindow):
         # connect widgets to controller
         self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
         self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
+
         # listen for model event signals
         self._model.imagesReadySignal.connect(self.onImagesReady)
-
+        self._ui.tableWidget.itemClicked.connect(self.onItemClicked)
 
     def onImagesReady(self, value):
         self._ui.tableWidget.setRowCount(len(self._model.images))
@@ -27,3 +28,6 @@ class MainView(QMainWindow):
         for index in range (0, len(self._model.images)):
             self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(images[index].diagnosis))
             self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(images[index].probability)))
+
+    def onItemClicked(self, value):
+        print(value.row())

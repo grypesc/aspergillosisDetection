@@ -32,6 +32,5 @@ class MainController(QObject):
        msgBox.setText(text)
        msgBox.exec()
 
-
     def exitApplication(self):
         QCoreApplication.instance().quit()
