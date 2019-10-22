@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>800</height>
+    <width>1500</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -102,16 +102,39 @@
            </column>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QGraphicsView" name="graphicsView"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="QGraphicsView" name="probChart"/>
-         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="overallInfo">
            <property name="text">
             <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="ctScanLabel">
+           <property name="minimumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label">
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>200</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>kkkkkkkk</string>
            </property>
           </widget>
          </item>
@@ -127,7 +150,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1600</width>
+     <width>1500</width>
      <height>22</height>
     </rect>
    </property>
