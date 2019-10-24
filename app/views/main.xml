@@ -47,7 +47,7 @@
             <enum>Qt::SolidLine</enum>
            </property>
            <property name="rowCount">
-            <number>3</number>
+            <number>1</number>
            </property>
            <property name="columnCount">
             <number>3</number>
@@ -80,8 +80,6 @@
             <bool>false</bool>
            </attribute>
            <row/>
-           <row/>
-           <row/>
            <column>
             <property name="text">
              <string>Name</string>
@@ -105,7 +103,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="overallInfo">
            <property name="text">
-            <string>TextLabel</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -126,7 +124,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="probPlotLabel">
            <property name="minimumSize">
             <size>
              <width>200</width>
@@ -134,7 +132,10 @@
             </size>
            </property>
            <property name="text">
-            <string>kkkkkkkk</string>
+            <string>Load images to generate a plot</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -159,6 +160,7 @@
      <string>Files</string>
     </property>
     <addaction name="actionLoad_directory"/>
+    <addaction name="actionReset"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -178,6 +180,11 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
    </property>
   </action>
  </widget>

@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
 import os
 import pydicom
@@ -12,6 +14,8 @@ from .image_meta_data import ImageMetaData
 class Model(QObject):
     imagesDirectorySignal = pyqtSignal(str)
     imagesReadySignal = pyqtSignal(list)
+    probPlotSignal = pyqtSignal(str)
+    resetSignal = pyqtSignal()
 
     @property
     def imagesDirectory(self):
@@ -34,6 +38,7 @@ class Model(QObject):
         self._images = []
         self._imagesDirectory = ''
         self._classifierName = 'example.h5'
+        self._probPlotName = '.probPlot.png'
 
     def evaluateImages(self):
         testX = np.zeros(shape=(len(self._images),512, 512, 1), dtype = "float16")
@@ -42,9 +47,10 @@ class Model(QObject):
 
         testX /= 2048
         model = load_model(os.path.join('resources', 'models', self._classifierName))
-        yPredictions = model.predict(x=testX, batch_size=32, verbose=1)
+        Y = model.predict(x=testX, batch_size=32, verbose=1)
 
-        for index, prediction in enumerate(yPredictions, start=0):
+        for index, prediction in enumerate(Y, start=0):
+
             if prediction[0] >= 0.5:
                 self.images[index].diagnosis = "Fungus"
                 self.images[index].probability = prediction[0]
@@ -52,5 +58,19 @@ class Model(QObject):
                 self.images[index].diagnosis = "No Fungus"
                 self.images[index].probability = prediction[1]
 
-        accuracy = np.sum(yPredictions[:,1])/len(self.images)
+        accuracy = np.sum(Y[:,1])/len(self.images)
         self.imagesReadySignal.emit(self.images)
+
+        self._generateProbabilityPlot([i for i in range(testX.shape[0])], Y[:,0])
+
+    def reset(self):
+        self._images = []
+        self._imagesDirectory = ''
+        self.resetSignal.emit()
+
+    def _generateProbabilityPlot(self, X, Y):
+        plt.ylim([0, 1])
+        plt.plot(X, Y)
+        plt.ylabel('Fungus probability')
+        plt.savefig(self._probPlotName)
+        self.probPlotSignal.emit(self._probPlotName)

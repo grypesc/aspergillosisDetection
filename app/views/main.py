@@ -17,22 +17,25 @@ class MainView(QMainWindow):
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
 
-        # connect widgets to controller
+        # connecting widgets to controller
         self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
+        self._ui.actionReset.triggered.connect(self._main_controller.resetModel)
         self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
 
-        # listen for model event signals
+        # listeners of model event signals
         self._model.imagesReadySignal.connect(self.onImagesReady)
+        self._model.probPlotSignal.connect(self.onProbPlotReady)
+        self._model.resetSignal.connect(self.onModelReset)
+
+        # listeners of user created events
         self._ui.tableWidget.itemClicked.connect(self.onItemClicked)
 
     def onImagesReady(self, value):
         self._ui.tableWidget.setRowCount(len(self._model.images))
         for index, image in enumerate(self._model.images, start=0):
             self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(image.name))
-        images = self._model.images
-        for index in range (0, len(self._model.images)):
-            self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(images[index].diagnosis))
-            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(images[index].probability)))
+            self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(image.diagnosis))
+            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(image.probability)))
 
     def onItemClicked(self, value):
         ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
@@ -41,3 +44,10 @@ class MainView(QMainWindow):
         print(img.dtype)
         image = QImage(img , 512, 512, QImage.Format_Grayscale8)
         self._ui.ctScanLabel.setPixmap(QPixmap.fromImage(image))
+
+    def onProbPlotReady(self, value):
+        pixmap = QPixmap(value)
+        self._ui.probPlotLabel.setPixmap(pixmap)
+
+    def onModelReset(self):
+        self.__init__(self._model, self._main_controller)

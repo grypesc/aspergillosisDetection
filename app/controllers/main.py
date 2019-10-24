@@ -25,12 +25,15 @@ class MainController(QObject):
             return
         self._model.evaluateImages()
 
+    def resetModel(self):
+        self._model.reset()
+
+    def exitApplication(self):
+        QCoreApplication.instance().quit()
+
     def displayMessageBox(self, icon, title, text):
        msgBox = QMessageBox()
        msgBox.setIcon(icon)
        msgBox.setWindowTitle(title)
        msgBox.setText(text)
        msgBox.exec()
-
-    def exitApplication(self):
-        QCoreApplication.instance().quit()
