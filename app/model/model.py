@@ -43,7 +43,7 @@ class Model(QObject):
     def evaluateImages(self):
         testX = np.zeros(shape=(len(self._images),512, 512, 1), dtype = "float16")
         for index in range (0, len(self.images)):
-            testX[index] = pydicom.read_file(os.path.join(self._imagesDirectory, self.images[index].name)).pixel_array[0].reshape(512,512,1)
+            testX[index] = pydicom.read_file(os.path.join(self._imagesDirectory, self.images[index].name)).pixel_array.reshape(512,512,1)
 
         testX /= 2048
         model = load_model(os.path.join('resources', 'models', self._classifierName))
@@ -52,10 +52,10 @@ class Model(QObject):
         for index, prediction in enumerate(Y, start=0):
 
             if prediction[0] >= 0.5:
-                self.images[index].diagnosis = "Fungus"
+                self.images[index].diagnosis = "No Fungus"
                 self.images[index].probability = prediction[0]
             else:
-                self.images[index].diagnosis = "No Fungus"
+                self.images[index].diagnosis = "Fungus"
                 self.images[index].probability = prediction[1]
 
         accuracy = np.sum(Y[:,1])/len(self.images)
@@ -69,6 +69,8 @@ class Model(QObject):
         self.resetSignal.emit()
 
     def _generateProbabilityPlot(self, X, Y):
+        plt.figure(figsize=(8,2))
+        plt.xlim([0, len(X)])
         plt.ylim([0, 1])
         plt.plot(X, Y)
         plt.ylabel('Fungus probability')

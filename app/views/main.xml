@@ -25,6 +25,24 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="1" column="0">
           <widget class="QTableWidget" name="tableWidget">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>700</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -115,6 +133,12 @@
              <height>512</height>
             </size>
            </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -133,6 +157,9 @@
            </property>
            <property name="text">
             <string>Load images to generate a plot</string>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

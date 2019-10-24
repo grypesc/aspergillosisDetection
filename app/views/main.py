@@ -1,12 +1,12 @@
 import os
 import pydicom
 import numpy as np
+
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QImage, QPainter, QPalette, QPixmap
 
 from views.main_ui import Ui_MainWindow
-
 
 class MainView(QMainWindow):
     def __init__(self, model, main_controller):
@@ -16,17 +16,17 @@ class MainView(QMainWindow):
         self._main_controller = main_controller
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
+        self.listenAndConnect()
 
+    def listenAndConnect(self):
         # connecting widgets to controller
         self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
         self._ui.actionReset.triggered.connect(self._main_controller.resetModel)
         self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
-
         # listeners of model event signals
         self._model.imagesReadySignal.connect(self.onImagesReady)
         self._model.probPlotSignal.connect(self.onProbPlotReady)
         self._model.resetSignal.connect(self.onModelReset)
-
         # listeners of user created events
         self._ui.tableWidget.itemClicked.connect(self.onItemClicked)
 
@@ -38,11 +38,12 @@ class MainView(QMainWindow):
             self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(image.probability)))
 
     def onItemClicked(self, value):
+        for image in self._model.images:
         ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
-        img = ds.pixel_array[0] # get image array
-        img += 2048
-        print(img.dtype)
-        image = QImage(img , 512, 512, QImage.Format_Grayscale8)
+        img = ds.pixel_array # get image array
+        img+=2048
+        img*=32
+        image = QImage(img , 512, 512, QImage.Format_Grayscale16)
         self._ui.ctScanLabel.setPixmap(QPixmap.fromImage(image))
 
     def onProbPlotReady(self, value):
@@ -50,4 +51,5 @@ class MainView(QMainWindow):
         self._ui.probPlotLabel.setPixmap(pixmap)
 
     def onModelReset(self):
-        self.__init__(self._model, self._main_controller)
+        self._ui.setupUi(self)
+        self.listenAndConnect()

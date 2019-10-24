@@ -15,13 +15,14 @@ class MainController(QObject):
         for dirpath, subdirs, files in os.walk(dir):
             dirPathRelative = dirpath.replace(dir, "")
             dirPathRelative = dirPathRelative.strip(os.sep)
-            for file in files:
+            for file in sorted(files):
                 if file.lower().endswith(".dcm"):
                     meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "" )
                     newFiles.append(meta)
         self._model.images = newFiles
         if (len(self._model.images) <= 0):
             self.displayMessageBox(QMessageBox.Warning, "Warning", "No dicom images found in that directory.")
+            self.resetModel()
             return
         self._model.evaluateImages()
 
