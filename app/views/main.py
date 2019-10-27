@@ -39,12 +39,12 @@ class MainView(QMainWindow):
 
     def onItemClicked(self, value):
         for image in self._model.images:
-        ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
-        img = ds.pixel_array # get image array
-        img+=2048
-        img*=32
-        image = QImage(img , 512, 512, QImage.Format_Grayscale16)
-        self._ui.ctScanLabel.setPixmap(QPixmap.fromImage(image))
+            ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
+            img = ds.pixel_array # get image array
+            img+=2048
+            img*=32
+            image = QImage(img , 512, 512, QImage.Format_Grayscale16)
+            self._ui.ctScanLabel.setPixmap(QPixmap.fromImage(image))
 
     def onProbPlotReady(self, value):
         pixmap = QPixmap(value)

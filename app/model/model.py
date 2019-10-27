@@ -37,7 +37,7 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._imagesDirectory = ''
-        self._classifierName = 'example.h5'
+        self._classifierName = 'Xception.h5'
         self._probPlotName = '.probPlot.png'
 
     def evaluateImages(self):
@@ -61,7 +61,7 @@ class Model(QObject):
         accuracy = np.sum(Y[:,1])/len(self.images)
         self.imagesReadySignal.emit(self.images)
 
-        self._generateProbabilityPlot([i for i in range(testX.shape[0])], Y[:,0])
+        self._generateProbabilityPlot([i for i in range(testX.shape[0])], Y[:,1])
 
     def reset(self):
         self._images = []
