@@ -11,9 +11,10 @@ from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
+from keras import backend as K
 
 
-dirTrainFungus = '../../data/train/fungus'
+dirTrain = '../../data/train/fungus'
 dirTrainNotFungus = '../../data/train/notFungus'
 dirValidFungus = '../../data/train/fungus'
 dirValidNotFungus = '../../data/train/notFungus'
@@ -26,44 +27,31 @@ for dirpath, subdirs, files in os.walk(dirTrainFungus):
 print("Number of fungus train images: " + str(fungusTrainCount))
 
 for dirpath, subdirs, files in os.walk(dirTrainNotFungus):
-    noFungusImages += len(files)
-print("Number of not fungus train images: " + str(noFungusImages))
+    notFungusTrainCount += len(files)
+print("Number of not fungus train images: " + str(notFungusTrainCount))
 
 for dirpath, subdirs, files in os.walk(dirValidFungus):
     fungusValidCount += len(files)
-print("Number of not fungus train images: " + str(fungusValidCount))
+print("Number not fungus valid images: " + str(fungusValidCount))
 
 for dirpath, subdirs, files in os.walk(dirValidNotFungus):
-    dirValidNotFungus += len(files)
-print("Number of not fungus train images: " + str(dirValidNotFungus))
+    notFungusValidCount += len(files)
+print("Number of not fungus valid images: " + str(notFungusValidCount))
 
 
-trainX = np.zeros(shape=(fungusTrainCount+notFungusTrainCount,299, 299, 3), dtype = "float32")
+trainImageDataGen = ImageDataGenerator(horizontal_flip=False)
+trainGenerator = trainImageDataGen.flow_from_directory(
+    '../../data/train',
+    target_size=(299, 299),
+    batch_size=16,
+    class_mode='categorical')
 
-index = 0
-for folder in [folderFungus, folderNoFungus]:
-    for dirpath, subdirs, files in os.walk(folder):
-        for file in files:
-            img = pydicom.read_file(dirpath + "/" + file).pixel_array
-            img = img[105:404,105:404].reshape(299,299)
-            stackedImg = np.stack((img,)*3, axis=-1)
-            trainX[index] = stackedImg
-            index+=1
-
-
-print("Finished loading data to RAM")
-
-trainX += 2048
-trainX /= 4096
-
-trainY = np.zeros(trainX.shape[0])
-trainY[0:fungusImages] = 1
-trainY = to_categorical(trainY, num_classes= 2)
-
-s = np.arange(trainX.shape[0])
-np.random.shuffle(s)
-trainX = trainX[s]
-trainY = trainY[s]
+validImageDataGen = ImageDataGenerator()
+validGenerator = validImageDataGen.flow_from_directory(
+    '../../data/validation',
+    target_size=(299, 299),
+    batch_size=16,
+    class_mode='categorical')
 
 xception = Xception(weights='imagenet', include_top=False, input_shape=(299, 299, 3))
 
@@ -72,31 +60,29 @@ for layer in xception.layers:
 
 model = Sequential()
 
-# Add the vgg convolutional base model
 model.add(xception)
-
-# Add new layers
 model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(2, activation='softmax'))
+model.add(Dense(3, activation='softmax'))
 
-# # Show a summary of the model. Check the number of trainable parameters
-# model.summary()
+model.summary()
 
-model.compile(loss='binary_crossentropy',
+model.compile(loss='categorical_crossentropy',
               optimizer=Adam(lr=1e-4),
               metrics=['acc'])
 
-history = model.fit(trainX, trainY, validation_split=0.2,
-                    epochs= 5, batch_size= 32, verbose=2)
+history = model.fit_generator(
+    trainGenerator,
+    epochs=5,
+    validation_data=validGenerator)
 
 model.save("../../app/resources/models/Xception.h5")
 
 print(history.history.keys())
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
-plt.title('model accuracy')
+plt.title('Model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper left')
@@ -104,7 +90,7 @@ plt.show()
 
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
-plt.title('model loss')
+plt.title('Model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper left')
