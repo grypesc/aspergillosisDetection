@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
 import os
 import pydicom
-import sys
-np.set_printoptions(threshold=sys.maxsize)
 
+from matplotlib.figure import Figure
 from keras.models import load_model
 from PyQt5.QtCore import QObject, pyqtSignal
+
 from .image_meta_data import ImageMetaData
 
 class Model(QObject):
@@ -37,13 +35,13 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._imagesDirectory = ''
-        self._classifierName = 'Xception.h5'
+        self._classifierName = 'example.h5'
         self._probPlotName = '.probPlot.png'
 
     def evaluateImages(self):
         testX = np.zeros(shape=(len(self._images),512, 512, 1), dtype = "float16")
         for index in range (0, len(self.images)):
-            testX[index] = pydicom.read_file(os.path.join(self._imagesDirectory, self.images[index].name)).pixel_array.reshape(512,512,1)
+            testX[index] = pydicom.read_file(os.path.join(self._imagesDirectory, self.images[index].name)).pixel_array[0].reshape(512,512,1)
 
         testX /= 2048
         model = load_model(os.path.join('resources', 'models', self._classifierName))

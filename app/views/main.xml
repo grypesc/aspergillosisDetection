@@ -187,6 +187,7 @@
      <string>Files</string>
     </property>
     <addaction name="actionLoad_directory"/>
+    <addaction name="actionLoad_files"/>
     <addaction name="actionReset"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -212,6 +213,11 @@
   <action name="actionReset">
    <property name="text">
     <string>Reset</string>
+   </property>
+  </action>
+  <action name="actionLoad_files">
+   <property name="text">
+    <string>Load files</string>
    </property>
   </action>
  </widget>

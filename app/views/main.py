@@ -3,8 +3,7 @@ import pydicom
 import numpy as np
 
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QImage, QPainter, QPalette, QPixmap
+from PyQt5.QtGui import QImage, QPixmap
 
 from views.main_ui import Ui_MainWindow
 
@@ -21,6 +20,7 @@ class MainView(QMainWindow):
     def listenAndConnect(self):
         # connecting widgets to controller
         self._ui.actionLoad_directory.triggered.connect(self._main_controller.loadDirectory)
+        self._ui.actionLoad_files.triggered.connect(self._main_controller.loadFiles)
         self._ui.actionReset.triggered.connect(self._main_controller.resetModel)
         self._ui.actionQuit.triggered.connect(self._main_controller.exitApplication)
         # listeners of model event signals
@@ -40,7 +40,7 @@ class MainView(QMainWindow):
     def onItemClicked(self, value):
         for image in self._model.images:
             ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
-            img = ds.pixel_array # get image array
+            img = ds.pixel_array[0] # get image array
             img+=2048
             img*=32
             image = QImage(img , 512, 512, QImage.Format_Grayscale16)

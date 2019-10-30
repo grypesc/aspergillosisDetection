@@ -1,6 +1,8 @@
 import os
+
 from PyQt5.QtCore import QObject, pyqtSlot, QDir, QCoreApplication
-from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QMessageBox)
+from PyQt5.QtWidgets import (QFileDialog, QMessageBox)
+
 from model.image_meta_data import ImageMetaData
 
 class MainController(QObject):
@@ -10,7 +12,6 @@ class MainController(QObject):
 
     def loadDirectory(self):
         dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
-        self._model.imagesDirectory = dir
         newFiles = []
         for dirpath, subdirs, files in os.walk(dir):
             dirPathRelative = dirpath.replace(dir, "")
@@ -19,11 +20,26 @@ class MainController(QObject):
                 if file.lower().endswith(".dcm"):
                     meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "" )
                     newFiles.append(meta)
-        self._model.images = newFiles
-        if (len(self._model.images) <= 0):
+        if (len(newFiles) <= 0):
             self.displayMessageBox(QMessageBox.Warning, "Warning", "No dicom images found in that directory.")
-            self.resetModel()
             return
+        self.resetModel()
+        self._model.imagesDirectory = dir
+        self._model.images = newFiles
+        self._model.evaluateImages()
+
+    def loadFiles(self):
+        files = QFileDialog.getOpenFileUrls(None, "Select a directory containing images")
+        files = [file.path() for file in files[0]]
+        if not files:
+            return
+        newFiles = []
+        for file in files:
+            if file.lower().endswith(".dcm"):
+                meta = ImageMetaData(file, "", "" )
+                newFiles.append(meta)
+        self.resetModel()
+        self._model.images = newFiles
         self._model.evaluateImages()
 
     def resetModel(self):
