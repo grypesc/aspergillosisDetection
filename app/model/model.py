@@ -48,7 +48,6 @@ class Model(QObject):
         Y = model.predict(x=testX, batch_size=32, verbose=1)
 
         for index, prediction in enumerate(Y, start=0):
-
             if prediction[0] >= 0.5:
                 self.images[index].diagnosis = "No Fungus"
                 self.images[index].probability = prediction[0]

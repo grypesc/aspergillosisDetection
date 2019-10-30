@@ -13,6 +13,23 @@
   <property name="windowTitle">
    <string>Pulmonary Aspergillosis Detection</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resources/icon.png</normaloff>
+    <normalon>resources/icon.png</normalon>
+    <disabledoff>resources/icon.png</disabledoff>
+    <disabledon>resources/icon.png</disabledon>
+    <activeoff>resources/icon.png</activeoff>
+    <activeon>resources/icon.png</activeon>
+    <selectedoff>resources/icon.png</selectedoff>
+    <selectedon>resources/icon.png</selectedon>resources/icon.png</iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>512</width>
+    <height>512</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
@@ -184,16 +201,17 @@
    </property>
    <widget class="QMenu" name="menuFiles">
     <property name="title">
-     <string>Files</string>
+     <string>&amp;Files</string>
     </property>
     <addaction name="actionLoad_directory"/>
     <addaction name="actionLoad_files"/>
     <addaction name="actionReset"/>
-    <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
    </widget>
    <addaction name="menuFiles"/>
@@ -202,22 +220,22 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_directory">
    <property name="text">
-    <string>Load directory</string>
+    <string>&amp;Load directory</string>
    </property>
   </action>
-  <action name="actionQuit">
+  <action name="actionExit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Exit</string>
    </property>
   </action>
   <action name="actionReset">
    <property name="text">
-    <string>Reset</string>
+    <string>&amp;Reset</string>
    </property>
   </action>
   <action name="actionLoad_files">
    <property name="text">
-    <string>Load files</string>
+    <string>&amp;Load files</string>
    </property>
   </action>
  </widget>
