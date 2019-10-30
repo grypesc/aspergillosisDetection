@@ -4,6 +4,7 @@ data
 
 #Auto generated ui files
 app/views/main_ui.py
+app/views/about_ui.py
 
 # Ignore all models except the 'examply' one
 app/resources/models/*

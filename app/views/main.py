@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 from PyQt5.QtGui import QImage, QPixmap
 
 from views.main_ui import Ui_MainWindow
+from views.about import AboutView
 
 class MainView(QMainWindow):
     def __init__(self, model, main_controller):
@@ -15,7 +16,6 @@ class MainView(QMainWindow):
         self._ui = Ui_MainWindow()
         self._ui.setupUi(self)
         self.listenAndConnect()
-        self._aboutString = "This app will classify your lungs images to one of the classes: /n xD /n xD Created by: Grzegorz R."*10
 
     def listenAndConnect(self):
         # connecting widgets to controller
@@ -23,12 +23,12 @@ class MainView(QMainWindow):
         self._ui.actionLoad_files.triggered.connect(self._main_controller.loadFiles)
         self._ui.actionReset.triggered.connect(self._main_controller.resetModel)
         self._ui.actionExit.triggered.connect(self._main_controller.exitApplication)
-        self._ui.actionAbout.triggered.connect(lambda: self._main_controller.displayMessageBox(QMessageBox.Information, "About", self._aboutString))
+        self._ui.actionAbout.triggered.connect(AboutView().show)
         # listeners of model event signals
         self._model.imagesReadySignal.connect(self.onImagesReady)
         self._model.probPlotSignal.connect(self.onProbPlotReady)
         self._model.resetSignal.connect(self.onModelReset)
-        # listeners of user created events
+        # listeners of table events
         self._ui.tableWidget.itemClicked.connect(self.onItemClicked)
 
     def onImagesReady(self, value):
