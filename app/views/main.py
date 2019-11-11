@@ -39,13 +39,8 @@ class MainView(QMainWindow):
             self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(image.probability)))
 
     def onItemClicked(self, value):
-        for image in self._model.images:
-            ds = pydicom.read_file(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
-            img = ds.pixel_array[0] # get image array
-            img+=2048
-            img*=32
-            image = QImage(img , 512, 512, QImage.Format_Grayscale16)
-            self._ui.ctScanLabel.setPixmap(QPixmap.fromImage(image))
+        pixmap = QPixmap(os.path.join(self._model.imagesDirectory,self._model.images[value.row()].name))
+        self._ui.ctScanLabel.setPixmap(pixmap)
 
     def onProbPlotReady(self, value):
         pixmap = QPixmap(value)
