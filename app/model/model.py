@@ -45,7 +45,6 @@ class Model(QObject):
         for index in range (0, len(self.images)):
             img = image.load_img(os.path.join(self._imagesDirectory, self.images[index].name), target_size=(512, 512, 3))
             pixelArray = image.img_to_array(img)
-            print(pixelArray)
             testX[index] = pixelArray
         testX = preprocess_input(testX)
         model = load_model(os.path.join('resources', 'models', self._classifierName))

@@ -24,7 +24,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer=Adam(lr=1e-4),
               metrics=['acc'])
 
-imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, horizontal_flip=False)
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
 generator = imageDataGen.flow_from_directory(
     '../../../data/valid/notFungus',
