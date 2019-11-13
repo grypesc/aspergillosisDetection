@@ -1,9 +1,8 @@
 import os
-import pydicom
 import numpy as np
 
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QPixmap
 
 from views.main_ui import Ui_MainWindow
 from views.about import AboutView

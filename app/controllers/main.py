@@ -18,7 +18,7 @@ class MainController(QObject):
             dirPathRelative = dirPathRelative.strip(os.sep)
             for file in sorted(files):
                 if file.lower().endswith((".jpg", ".jpeg")):
-                    meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "" )
+                    meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "")
                     newFiles.append(meta)
         if (len(newFiles) <= 0):
             self.displayMessageBox(QMessageBox.Warning, "Warning", "No jpg images found in that directory.")
@@ -26,10 +26,10 @@ class MainController(QObject):
         self.resetModel()
         self._model.imagesDirectory = dir
         self._model.images = newFiles
-        self._model.evaluateImages()
+        self._model.predictImages()
 
     def loadFiles(self):
-        files = QFileDialog.getOpenFileUrls(None, "Select a directory containing images")
+        files = QFileDialog.getOpenFileUrls(None, "Select .jpg files")
         files = [file.path() for file in files[0]]
         if not files:
             return
@@ -40,7 +40,7 @@ class MainController(QObject):
                 newFiles.append(meta)
         self.resetModel()
         self._model.images = newFiles
-        self._model.evaluateImages()
+        self._model.predictImages()
 
     def resetModel(self):
         self._model.reset()
