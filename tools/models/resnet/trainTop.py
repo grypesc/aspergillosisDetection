@@ -8,9 +8,6 @@ from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 
-
-
-
 trainData = np.loadtxt('resnet_train.csv', delimiter=",")
 s = np.arange(trainData.shape[0])
 np.random.shuffle(s)

@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os
 
 from keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D, Cropping2D
-from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adam
+from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.image import flip_left_right
 
@@ -15,22 +13,16 @@ def flipAndPreprocess(x):
     x = preprocess_input(x)
     return x
 
+if os.path.isfile('resnet_train.csv'):
+    os.remove("resnet_train.csv")
 file = open('resnet_train.csv','a')
 
 model = Sequential()
-model.add(Cropping2D(cropping=((100, 100), (100, 100)),
-                     input_shape=(512, 512, 3)))
-
-resnet = ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3))
-
-model.add(resnet)
-
-
-model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=1e-4),
-              metrics=['acc'])
+model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
+model.add(ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3)))
 
 preprocessingFunctions = [preprocess_input, flipAndPreprocess]
+
 for preprocessingFunction in preprocessingFunctions:
     imageDataGen = ImageDataGenerator(preprocessing_function=preprocessingFunction)
 
