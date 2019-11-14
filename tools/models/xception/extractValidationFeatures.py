@@ -2,18 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.applications.xception import Xception, preprocess_input
 from keras.layers import Cropping2D
 from keras.models import Sequential, Model
 from keras.preprocessing.image import ImageDataGenerator
 
-if os.path.isfile('resnet_validation.csv'):
-    os.remove("resnet_validation.csv")
-file = open('resnet_validation.csv','a')
+if os.path.isfile('xception_validation.csv'):
+    os.remove("xception_validation.csv")
+file = open('xception_validation.csv','a')
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
-model.add(ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3)))
+model.add(Xception(weights='imagenet', include_top=True, input_shape=(299, 299, 3)))
 
 imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 

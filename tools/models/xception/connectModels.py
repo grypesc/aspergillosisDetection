@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.applications.Xception import Xception, preprocess_input
 from keras.models import Sequential, Model, load_model
 from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
@@ -9,9 +9,9 @@ from keras.preprocessing.image import ImageDataGenerator
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
-model.add(ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3)))
-model.add(load_model('resnetTop.h5'))
-model.save("../../../app/resources/models/resnet50.h5")
+model.add(Xception(weights='imagenet', include_top=True, input_shape=(299, 299, 3)))
+model.add(load_model('xceptionTop.h5'))
+model.save("../../../app/resources/models/xception.h5")
 
 # validImageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 # validGenerator = validImageDataGen.flow_from_directory(

@@ -72,7 +72,7 @@ class Model(QObject):
         plt.xlim([0, len(X)])
         plt.ylim([0, 1])
         plt.plot(X, Y)
-        plt.plot(X, [0.5]*X)
+        plt.plot(X, [0.5]*len(X))
         plt.ylabel('Fungus probability')
         plt.savefig(self._probPlotName)
         self.probPlotSignal.emit(self._probPlotName)

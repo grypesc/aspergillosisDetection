@@ -29,7 +29,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=128,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 0)
@@ -38,7 +38,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/fungus',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=128,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 1)
@@ -47,7 +47,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notLungs',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=128,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 2)
