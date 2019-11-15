@@ -9,7 +9,7 @@ from keras.preprocessing.image import ImageDataGenerator
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
-model.add(ResNet50(weights='imagenet', include_top=True, input_shape=(224, 224, 3)))
+model.add(ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3), pooling='avg'))
 model.add(load_model('resnetTop.h5'))
 model.save("../../../app/resources/models/resnet50.h5")
 

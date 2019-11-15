@@ -3,11 +3,11 @@ import numpy as np
 import os
 
 
-from keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D, Cropping2D, GlobalAveragePooling2D
 from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adam
+from keras.optimizers import Nadam
 from keras.preprocessing.image import ImageDataGenerator
 
 
@@ -28,13 +28,11 @@ validGenerator = validImageDataGen.flow_from_directory(
     class_mode='categorical')
 
 model = Sequential()
-model.add(Cropping2D(cropping=((100, 100), (100, 100)),
-                     input_shape=(512, 512, 3)))
+model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
 
-resnet = ResNet50(weights='imagenet', include_top=False, input_shape=(312, 312, 3))
-for layer in resnet.layers:
+model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(312, 312, 3)))
+for layer in model.layers:
     layer.trainable = False
-model.add(resnet)
 
 model.add( GlobalAveragePooling2D(data_format='channels_last'))
 
@@ -45,12 +43,13 @@ model.add(Dense(2, activation='softmax'))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=1e-4),
+              optimizer=Nadam(lr=1e-4),
               metrics=['acc'])
 
 history = model.fit_generator(
     trainGenerator,
-    epochs=10,
+    steps_per_epoch=100,
+    epochs=30,
     validation_data=validGenerator,
     verbose=2)
 
