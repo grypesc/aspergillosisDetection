@@ -14,29 +14,26 @@ np.random.shuffle(s)
 trainData = trainData[s]
 
 labels = trainData[:,len(trainData[0])-1]
-labels = to_categorical(labels, num_classes=3)
+labels = to_categorical(labels, num_classes=2)
 
 validationData = np.loadtxt('resnet_validation.csv', delimiter=",")
 
 model = Sequential()
-model.add(Dense(200, activation='relu', input_shape=(1000,) ))
-
-model.add(Dense(100, activation='relu'))
-model.add(Dense(10, activation='relu'))
-
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(350, activation='relu', input_shape=(1000,) ))
+model.add(Dense(150, activation='relu'))
+model.add(Dense(2, activation='softmax'))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=1e-4),
+              optimizer=Adam(lr=0.5*1e-4),
               metrics=['acc'])
 
 history = model.fit(
     x=trainData[:, :-1],
     y=labels,
-    epochs=20,
+    epochs=50,
     batch_size=64,
-    validation_data=(validationData[:,:-1], to_categorical(validationData[:,-1], num_classes=3)),
+    validation_data=(validationData[:,:-1], to_categorical(validationData[:,-1], num_classes=2)),
     verbose=2)
 
 model.save("resnetTop.h5")
