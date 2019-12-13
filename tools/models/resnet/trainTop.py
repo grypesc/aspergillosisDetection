@@ -19,9 +19,8 @@ labels = to_categorical(labels, num_classes=2)
 validationData = np.loadtxt('resnet_validation.csv', delimiter=",")
 
 model = Sequential()
-model.add(Dense(100, activation='relu', input_shape=(2048,)))
-model.add(Dropout(0.5))
-model.add(Dense(2, activation='softmax'))
+
+model.add(Dense(2, activation='softmax', input_shape=(2048,)))
 model.summary()
 
 model.compile(loss='binary_crossentropy',
@@ -31,7 +30,7 @@ model.compile(loss='binary_crossentropy',
 history = model.fit(
     x=trainData[:, :-1],
     y=labels,
-    epochs=100,
+    epochs=200,
     batch_size=1024,
     validation_data=(validationData[:,:-1], to_categorical(validationData[:,-1], num_classes=2)),
     verbose=2)

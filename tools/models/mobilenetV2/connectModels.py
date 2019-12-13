@@ -1,6 +1,6 @@
 import numpy as np
 
-from keras.applications.resnet50 import ResNet50, preprocess_input
+from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from keras.models import Sequential, Model, load_model
 from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
@@ -8,9 +8,9 @@ from keras.preprocessing.image import ImageDataGenerator
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
-model.add(ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3), pooling='avg'))
-model.add(load_model('resnetTop.h5'))
-model.save("../../../app/resources/models/resnet50.h5")
+model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3), pooling='avg'))
+model.add(load_model('mobileNetV2Top0.5132_0.7620.h5'))
+model.save("../../../app/resources/models/mobileNetV2Top0.5132_0.7620.h5")
 
 # validImageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 # validGenerator = validImageDataGen.flow_from_directory(

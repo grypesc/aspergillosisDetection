@@ -4,7 +4,7 @@ import os
 
 from keras.models import load_model
 from keras.preprocessing import image
-from keras.applications.resnet50 import preprocess_input
+from keras.applications.mobilenet_v2 import preprocess_input
 from matplotlib.figure import Figure
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -36,7 +36,7 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._imagesDirectory = ''
-        self._classifierName = 'resnet50.h5'
+        self._classifierName = 'mobileNetV2Top0.5132_0.7620.h5'
         self._probPlotName = '.probPlot.png'
         self._model = load_model(os.path.join('resources', 'models', self._classifierName))
 
@@ -50,10 +50,10 @@ class Model(QObject):
         predictions = self._model.predict(testX, verbose=1)
         for index, prediction in enumerate(predictions, start=0):
             if prediction[0] >= 0.5:
-                self.images[index].diagnosis = "No fungus"
+                self.images[index].diagnosis = "No fungi"
                 self.images[index].probability = prediction[0]
             elif prediction[1] >= 0.5:
-                self.images[index].diagnosis = "Fungus"
+                self.images[index].diagnosis = "Fungi"
                 self.images[index].probability = prediction[1]
             else:
                 self.images[index].diagnosis = "No lungs"
