@@ -8,9 +8,9 @@ from keras.preprocessing.image import ImageDataGenerator
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
-model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3), pooling='avg'))
-model.add(load_model('mobileNetV2Top0.5132_0.7620.h5'))
-model.save("../../../app/resources/models/mobileNetV2Top0.5132_0.7620.h5")
+model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(312, 312, 3), pooling='avg'))
+model.add(load_model('amobileNetV2Top0.5009_0.7834.h5'))
+model.save("../../../app/resources/models/mobileNetV2Top0.5009_0.7834.h5")
 
 # validImageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 # validGenerator = validImageDataGen.flow_from_directory(

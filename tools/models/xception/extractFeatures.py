@@ -2,10 +2,9 @@ import numpy as np
 import os
 
 from keras.applications.xception import Xception, preprocess_input
-from keras.models import Sequential, Model
+from keras.models import Sequential
 from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
-from tensorflow.image import flip_left_right
 
 def flipAndPreprocess(x):
     x = np.fliplr(x)
@@ -28,7 +27,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=64,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 0)
@@ -37,7 +36,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/fungus',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=64,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 1)
@@ -46,7 +45,7 @@ for preprocessingFunction in preprocessingFunctions:
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notLungs',
         target_size=(512, 512),
-        batch_size=32,
+        batch_size=64,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 2)
@@ -54,13 +53,16 @@ for preprocessingFunction in preprocessingFunctions:
 
 ####### Validation features #######
 
-imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
+if os.path.isfile('xception_validation.csv'):
+    os.remove("xception_validation.csv")
+file = open('xception_validation.csv','a')
 
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 generator = imageDataGen.flow_from_directory(
     '../../../data/valid/notFungus',
     target_size=(512, 512),
-    batch_size=32,
-    class_mode='categorical')
+    batch_size=64,
+    class_mode=None)
 features = model.predict_generator(generator, verbose=1)
 labels = np.full((features.shape[0], 1), 0)
 np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
@@ -68,8 +70,8 @@ np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
 generator = imageDataGen.flow_from_directory(
     '../../../data/valid/fungus',
     target_size=(512, 512),
-    batch_size=32,
-    class_mode='categorical')
+    batch_size=64,
+    class_mode=None)
 features = model.predict_generator(generator, verbose=1)
 labels = np.full((features.shape[0], 1), 1)
 np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
@@ -77,7 +79,7 @@ np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
 # generator = imageDataGen.flow_from_directory(
 #     '../../../data/valid/notLungs',
 #     target_size=(512, 512),
-#     batch_size=32,
+#     batch_size=64,
 #     class_mode='categorical')
 # features = model.predict_generator(generator, verbose=1)
 # labels = np.full((features.shape[0], 1), 2)

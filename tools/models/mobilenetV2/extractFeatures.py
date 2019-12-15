@@ -5,25 +5,26 @@ from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
 from keras.models import Sequential, Model
 from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
-from tensorflow.image import flip_left_right
+
 
 def flipAndPreprocess(x):
     x = np.fliplr(x)
     x = preprocess_input(x)
     return x
 
+
 if os.path.isfile('mobileNetV2_train.csv'):
     os.remove("mobileNetV2_train.csv")
-file = open('mobileNetV2_train.csv','a')
+file = open('mobileNetV2_train.csv', 'a')
 
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 3)))
 model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(312, 312, 3), pooling='avg'))
 
-preprocessingFunctions = [preprocess_input]
+preprocessingFunctions = [preprocess_input, flipAndPreprocess]
 
 for preprocessingFunction in preprocessingFunctions:
-    imageDataGen = ImageDataGenerator(preprocessing_function=preprocessingFunction, rotation_range=5)
+    imageDataGen = ImageDataGenerator(preprocessing_function=preprocessingFunction)
 
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
@@ -52,12 +53,11 @@ for preprocessingFunction in preprocessingFunctions:
     labels = np.full((features.shape[0], 1), 2)
     np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
 
-
 ####### Validation features #######
 
 if os.path.isfile('mobileNetV2_validation.csv'):
     os.remove("mobileNetV2_validation.csv")
-file = open('mobileNetV2_validation.csv','a')
+file = open('mobileNetV2_validation.csv', 'a')
 
 imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 generator = imageDataGen.flow_from_directory(

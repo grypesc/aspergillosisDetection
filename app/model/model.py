@@ -36,7 +36,7 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._imagesDirectory = ''
-        self._classifierName = 'mobileNetV2Top0.5132_0.7620.h5'
+        self._classifierName = 'mobileNetV2Top0.5009_0.7834.h5'
         self._probPlotName = '.probPlot.png'
         self._model = load_model(os.path.join('resources', 'models', self._classifierName))
 
@@ -49,10 +49,10 @@ class Model(QObject):
         testX = preprocess_input(testX)
         predictions = self._model.predict(testX, verbose=1)
         for index, prediction in enumerate(predictions, start=0):
-            if prediction[0] >= 0.5:
+            if prediction[0] >= prediction[1] and prediction[0] >= prediction[2]:
                 self.images[index].diagnosis = "No fungi"
                 self.images[index].probability = prediction[0]
-            elif prediction[1] >= 0.5:
+            elif prediction[1] >= prediction[0] and prediction[1] >= prediction[2]:
                 self.images[index].diagnosis = "Fungi"
                 self.images[index].probability = prediction[1]
             else:

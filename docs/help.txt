@@ -4,4 +4,11 @@ qtchooser -run-tool=designer -qt=5 &
 Convert .xml to ui.py:
 pyuic5 views/main.xml -o views/main_ui.py
 
-pipeline: open, crop & data augm, normalize, create Y, feed
+VGG16 	(1, 4096)
+VGG19 	(1, 4096)
+InceptionV3 	(1, 131072)
+ResNet50 	(1, 2048)
+InceptionResNetV2 	(1, 98304)
+Xception 	(1, 2048)
+MobileNet 	(1, 50176)
+mobileNetV2 (1, 1280)
