@@ -18,15 +18,19 @@ labels = to_categorical(labels, num_classes=3)
 validationData = np.loadtxt('xception_validation.csv', delimiter=",")
 
 model = Sequential()
-model.add(Dense(2048, activation='relu', input_shape=(2048,) ))
-
+model.add(Dense(4096, activation='relu', input_shape=(2048,) ))
+model.add(Dropout(0.5))
 model.add(Dense(2048, activation='relu' ))
+model.add(Dropout(0.5))
+model.add(Dense(1024, activation='relu' ))
+model.add(Dropout(0.5))
+model.add(Dense(512, activation='relu' ))
 model.add(Dropout(0.5))
 model.add(Dense(3, activation='softmax'))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=0.2*1e-5),
+              optimizer=Adam(lr=0.5*1e-5),
               metrics=['acc'])
 
 history = model.fit(

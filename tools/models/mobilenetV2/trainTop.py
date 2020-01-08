@@ -4,7 +4,7 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adam
+from keras.optimizers import Nadam
 from keras.callbacks.callbacks import ModelCheckpoint
 
 trainData = np.loadtxt('mobileNetV2_train.csv', delimiter=",")
@@ -19,16 +19,11 @@ validationData = np.loadtxt('mobileNetV2_validation.csv', delimiter=",")
 
 model = Sequential()
 
-model.add(Dense(1280, activation='relu', input_shape=(1280,)))
-
-model.add(Dense(128, activation='relu'))
-
-
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(3, activation='softmax', input_shape=(1280,)))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=0.1 * 1e-5),
+              optimizer=Nadam(lr= 1e-4),
               metrics=['acc'])
 
 history = model.fit(

@@ -1,41 +1,41 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from keras.applications.resnet50 import ResNet50
-from keras.models import Sequential, Model
+from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
-from keras.preprocessing.image import ImageDataGenerator
+from keras.callbacks.callbacks import ModelCheckpoint
 
 trainData = np.loadtxt('resnet_train.csv', delimiter=",")
 s = np.arange(trainData.shape[0])
 np.random.shuffle(s)
 trainData = trainData[s]
 
-labels = trainData[:,len(trainData[0])-1]
-labels = to_categorical(labels, num_classes=2)
+labels = trainData[:, len(trainData[0]) - 1]
+labels = to_categorical(labels, num_classes=3)
 
 validationData = np.loadtxt('resnet_validation.csv', delimiter=",")
 
 model = Sequential()
 
-model.add(Dense(2, activation='softmax', input_shape=(2048,)))
+model.add(Dense(2048, activation='relu', input_shape=(2048,)))
+model.add(Dense(3, activation='softmax'))
 model.summary()
 
-model.compile(loss='binary_crossentropy',
-              optimizer=Adam(lr=2*1e-5),
+model.compile(loss='categorical_crossentropy',
+              optimizer=Adam(lr=2*1e-6),
               metrics=['acc'])
 
 history = model.fit(
     x=trainData[:, :-1],
     y=labels,
-    epochs=200,
-    batch_size=1024,
-    validation_data=(validationData[:,:-1], to_categorical(validationData[:,-1], num_classes=2)),
+    epochs=100,
+    batch_size=512,
+    validation_data=(validationData[:, :-1], to_categorical(validationData[:, -1], num_classes=3)),
+    callbacks=[ModelCheckpoint("resnet50Top{val_loss:.4f}_{val_acc:.4f}.h5", save_best_only=True, monitor='val_loss',
+                               verbose=0, mode='auto', period=1)],
     verbose=2)
-
-model.save("resnetTop.h5")
 
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])

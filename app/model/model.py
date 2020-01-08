@@ -36,7 +36,7 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._imagesDirectory = ''
-        self._classifierName = 'mobileNetV2Top0.5009_0.7834.h5'
+        self._classifierName = 'amobileNetV2Top0.5009_0.7834.h5'
         self._probPlotName = '.probPlot.png'
         self._model = load_model(os.path.join('resources', 'models', self._classifierName))
 
