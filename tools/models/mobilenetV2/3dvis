@@ -1,0 +1,45 @@
+from keras.preprocessing import image
+import numpy as np
+import os, sys
+from mayavi import mlab
+from tvtk.util.ctf import PiecewiseFunction
+from mayavi.tools.helper_functions import volume_slice
+
+from model.image_meta_data import ImageMetaData
+
+np.set_printoptions(threshold=sys.maxsize)
+
+if __name__ == '__main__':
+   dir = "../../../data/lol2"
+   images_meta = []
+   for dirpath, subdirs, files in os.walk(dir):
+      dirPathRelative = dirpath.replace(dir, "")
+      dirPathRelative = dirPathRelative.strip(os.sep)
+      for file in sorted(files):
+         if file.lower().endswith((".jpg", ".jpeg")):
+               meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "")
+               images_meta.append(meta)
+
+   testX = np.zeros(shape=(len(images_meta), 512, 512), dtype="float32")
+   for index in range(0, len(images_meta)):
+      img = image.load_img(os.path.join(dir, images_meta[index].name), target_size=(512, 512), color_mode='grayscale')
+      testX[index] = img
+
+   s = testX[:, 50:340, 50:456]
+
+   print(s.shape)
+   mlab.figure('Patient #17')
+   vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(s))
+
+   otf = PiecewiseFunction()
+   otf.add_point(0, 0.0)
+   otf.add_point(150, 0.0001)
+   otf.add_point(255, 1)
+   vol._otf = otf
+   vol._volume_property.set_scalar_opacity(otf)
+
+   # volume_slice(s, plane_orientation='x_axes')
+
+   mlab.show()
+
+
