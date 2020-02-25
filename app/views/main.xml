@@ -215,7 +215,15 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuRender">
+    <property name="title">
+     <string>&amp;Render</string>
+    </property>
+    <addaction name="action3D_Model"/>
+    <addaction name="actionSlice"/>
+   </widget>
    <addaction name="menuFiles"/>
+   <addaction name="menuRender"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -242,6 +250,16 @@
   <action name="actionAbout">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="action3D_Model">
+   <property name="text">
+    <string>3D Model</string>
+   </property>
+  </action>
+  <action name="actionSlice">
+   <property name="text">
+    <string>Slice</string>
    </property>
   </action>
  </widget>

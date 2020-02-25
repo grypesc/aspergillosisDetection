@@ -5,52 +5,53 @@ from PyQt5.QtWidgets import (QFileDialog, QMessageBox)
 
 from model.image_meta_data import ImageMetaData
 
+
 class MainController(QObject):
     def __init__(self, model):
         super().__init__()
         self._model = model
 
-    def loadDirectory(self):
+    def load_directory(self):
         dir = str(QFileDialog.getExistingDirectory(None, "Select a directory containing images"))
-        newFiles = []
+        images = []
         for dirpath, subdirs, files in os.walk(dir):
             dirPathRelative = dirpath.replace(dir, "")
             dirPathRelative = dirPathRelative.strip(os.sep)
             for file in sorted(files):
                 if file.lower().endswith((".jpg", ".jpeg")):
                     meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "")
-                    newFiles.append(meta)
-        if (len(newFiles) <= 0):
+                    images.append(meta)
+        if len(images) <= 0:
             self.displayMessageBox(QMessageBox.Warning, "Warning", "No jpg images found in that directory.")
             return
-        self.resetModel()
-        self._model.imagesDirectory = dir
-        self._model.images = newFiles
-        self._model.predictImages()
+        self.reset_model()
+        self._model.images_directory = dir
+        self._model.images = images
+        self._model.predict_images()
 
-    def loadFiles(self):
+    def load_files(self):
         files = QFileDialog.getOpenFileUrls(None, "Select .jpg files")
         files = [file.path() for file in files[0]]
         if not files:
             return
-        newFiles = []
+        images = []
         for file in files:
             if file.lower().endswith((".jpg", ".jpeg")):
-                meta = ImageMetaData(file, "", "" )
-                newFiles.append(meta)
-        self.resetModel()
-        self._model.images = newFiles
-        self._model.predictImages()
+                meta = ImageMetaData(file, "", "")
+                images.append(meta)
+        self.reset_model()
+        self._model.images = images
+        self._model.predict_images()
 
-    def resetModel(self):
+    def reset_model(self):
         self._model.reset()
 
-    def exitApplication(self):
+    def exit_app(self):
         QCoreApplication.instance().quit()
 
-    def displayMessageBox(self, icon, title, text):
-       msgBox = QMessageBox()
-       msgBox.setIcon(icon)
-       msgBox.setWindowTitle(title)
-       msgBox.setText(text)
-       msgBox.exec()
+    def display_message_box(icon, title, text):
+        msgBox = QMessageBox()
+        msgBox.setIcon(icon)
+        msgBox.setWindowTitle(title)
+        msgBox.setText(text)
+        msgBox.exec()
