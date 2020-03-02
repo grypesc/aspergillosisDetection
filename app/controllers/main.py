@@ -1,9 +1,9 @@
 import os
 
-from PyQt5.QtCore import QObject, pyqtSlot, QDir, QCoreApplication
-from PyQt5.QtWidgets import (QFileDialog, QMessageBox)
-
 from model.image_meta_data import ImageMetaData
+
+from PyQt5.QtCore import QObject, QCoreApplication
+from PyQt5.QtWidgets import (QFileDialog, QMessageBox)
 
 
 class MainController(QObject):
