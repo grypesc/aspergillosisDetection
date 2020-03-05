@@ -16,7 +16,7 @@ class RenderController(QObject):
         super().__init__()
         self._model = model
 
-    def volume_render(self, min_depth, max_depth, is_bronchioles_mode, is_advanced_mode):
+    def volume_render(self, min_depth, max_depth, is_bronchioles_mode, is_no_contrast_mode, is_advanced_mode):
         if min_depth >= max_depth:
             MainController.display_message_box(QMessageBox.Warning, "Error",
                                                "Minimal depth must be less then maximal depth.")
@@ -43,27 +43,36 @@ class RenderController(QObject):
         vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(s))
 
         otf = PiecewiseFunction()
-        if is_bronchioles_mode:
+        if is_bronchioles_mode and not is_no_contrast_mode:
             otf.add_point(0, 0.0)
             otf.add_point(99, 0.0)
             otf.add_point(100, 0.1)
             otf.add_point(190, 0.1)
             otf.add_point(191, 0.0)
             otf.add_point(255, 0)
-        else:
+        elif not is_no_contrast_mode:
             otf.add_point(0, 0.0)
             otf.add_point(139, 0.0)
             otf.add_point(140, 0.1)
             otf.add_point(200, 0.1)
             otf.add_point(255, 1)
+        elif is_bronchioles_mode:
+            otf.add_point(0, 0.0)
+            otf.add_point(1, 0.2)
+            otf.add_point(30, 0.2)
+            otf.add_point(30, 0.0)
+            otf.add_point(255, 0.0)
+        else:
+            otf.add_point(0, 0.0)
+            otf.add_point(1, 0.1)
+            otf.add_point(50, 1.0)
+
         vol._otf = otf
         vol._volume_property.set_scalar_opacity(otf)
 
         mlab.show()
 
-
-
-    def slice_render(self):
+    def slice_render(self, axis):
         if self._model._images_directory == '':
             MainController.display_message_box(QMessageBox.Warning, "Error", "Load images first.")
             return
@@ -74,7 +83,7 @@ class RenderController(QObject):
             images[index] = img
 
         mlab.figure('Slice render')
-        volume_slice(images, plane_orientation='x_axes', colormap='black-white')
+        volume_slice(images, plane_orientation= axis + '_axes', colormap='black-white')
 
         mlab.options.backend = 'auto'
         mlab.show()

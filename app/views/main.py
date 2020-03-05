@@ -28,7 +28,9 @@ class MainView(QMainWindow):
         self._ui.actionExit.triggered.connect(self._main_controller.exit_app)
         self._ui.actionAbout.triggered.connect(self._about_view.show)
         self._ui.action3D_Model.triggered.connect(self._volume_render_view.show)
-        self._ui.actionSlice.triggered.connect(self._render_controller.slice_render)
+        self._ui.actionSlice_X.triggered.connect(lambda: self._render_controller.slice_render('x'))
+        self._ui.actionSlice_Y.triggered.connect(lambda: self._render_controller.slice_render('y'))
+        self._ui.actionSlice_Z.triggered.connect(lambda: self._render_controller.slice_render('z'))
         # listeners of model event signals
         self._model.images_ready_signal.connect(self.on_images_ready)
         self._model.prob_plot_signal.connect(self.on_prob_plot_ready)

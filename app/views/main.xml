@@ -50,7 +50,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>700</width>
+             <width>650</width>
              <height>16777215</height>
             </size>
            </property>
@@ -157,6 +157,29 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="0">
+          <widget class="QFrame" name="frame">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QPushButton" name="predictButton">
+            <property name="geometry">
+             <rect>
+              <x>510</x>
+              <y>20</y>
+              <width>111</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Predict</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
          <item row="2" column="1">
           <widget class="QLabel" name="probPlotLabel">
            <property name="minimumSize">
@@ -174,29 +197,6 @@
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QFrame" name="frame">
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <widget class="QPushButton" name="predictButton">
-            <property name="geometry">
-             <rect>
-              <x>570</x>
-              <y>20</y>
-              <width>111</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Predict</string>
-            </property>
-           </widget>
           </widget>
          </item>
         </layout>
@@ -235,7 +235,9 @@
      <string>&amp;Render</string>
     </property>
     <addaction name="action3D_Model"/>
-    <addaction name="actionSlice"/>
+    <addaction name="actionSlice_X"/>
+    <addaction name="actionSlice_Y"/>
+    <addaction name="actionSlice_Z"/>
    </widget>
    <addaction name="menuFiles"/>
    <addaction name="menuRender"/>
@@ -272,9 +274,19 @@
     <string>3D Model</string>
    </property>
   </action>
-  <action name="actionSlice">
+  <action name="actionSlice_X">
    <property name="text">
-    <string>Slice</string>
+    <string>Slice_X</string>
+   </property>
+  </action>
+  <action name="actionSlice_Y">
+   <property name="text">
+    <string>Slice_Y</string>
+   </property>
+  </action>
+  <action name="actionSlice_Z">
+   <property name="text">
+    <string>Slice_Z</string>
    </property>
   </action>
  </widget>

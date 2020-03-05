@@ -39,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>60</y>
+     <y>50</y>
      <width>48</width>
      <height>26</height>
     </rect>
@@ -55,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>60</y>
+     <y>50</y>
      <width>48</width>
      <height>26</height>
     </rect>
@@ -71,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>10</y>
+     <y>0</y>
      <width>81</width>
      <height>51</height>
     </rect>
@@ -84,7 +84,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>10</y>
+     <y>0</y>
      <width>81</width>
      <height>51</height>
     </rect>
@@ -96,8 +96,8 @@
   <widget class="QCheckBox" name="checkBoxBronchioles">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>110</y>
+     <x>20</x>
+     <y>100</y>
      <width>151</width>
      <height>23</height>
     </rect>
@@ -109,14 +109,27 @@
   <widget class="QCheckBox" name="checkBoxAdvanced">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>150</y>
+     <x>20</x>
+     <y>160</y>
      <width>161</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>Advanced mode</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBoxNoContrast">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>161</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>No contrast</string>
    </property>
   </widget>
  </widget>
