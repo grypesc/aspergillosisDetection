@@ -135,13 +135,6 @@
            </column>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="overallInfo">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QLabel" name="ctScanLabel">
            <property name="minimumSize">
@@ -183,6 +176,29 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="0">
+          <widget class="QFrame" name="frame">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QPushButton" name="predictButton">
+            <property name="geometry">
+             <rect>
+              <x>570</x>
+              <y>20</y>
+              <width>111</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Predict</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -204,7 +220,6 @@
      <string>&amp;Files</string>
     </property>
     <addaction name="actionLoad_directory"/>
-    <addaction name="actionLoad_files"/>
     <addaction name="actionReset"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>

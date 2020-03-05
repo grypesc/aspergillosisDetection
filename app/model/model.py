@@ -33,7 +33,7 @@ class Model(QObject):
         super().__init__()
         self._images = []
         self._images_directory = ''
-        self._classifier_name = 'amobileNetV2Top0.3484_0.8699.h5'
+        self._classifier_name = 'amobileNetV2Top0.8728_0.2769.h5'
         self._prob_plot_name = '.probPlot.png'
         self._model = None
 

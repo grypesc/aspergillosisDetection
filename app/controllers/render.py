@@ -39,6 +39,7 @@ class RenderController(QObject):
             images[index] = img
 
         s = images[:, min_depth:max_depth, :]
+        s = s[:, :, ::-1]
         vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(s))
 
         otf = PiecewiseFunction()
@@ -51,8 +52,9 @@ class RenderController(QObject):
             otf.add_point(255, 0)
         else:
             otf.add_point(0, 0.0)
-            otf.add_point(140, 0.0001)
-            otf.add_point(200, 0.01)
+            otf.add_point(139, 0.0)
+            otf.add_point(140, 0.1)
+            otf.add_point(200, 0.1)
             otf.add_point(255, 1)
         vol._otf = otf
         vol._volume_property.set_scalar_opacity(otf)

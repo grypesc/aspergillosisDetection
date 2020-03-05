@@ -22,12 +22,12 @@ class MainController(QObject):
                     meta = ImageMetaData(os.path.join(dirPathRelative, file), "", "")
                     images.append(meta)
         if len(images) <= 0:
-            self.displayMessageBox(QMessageBox.Warning, "Warning", "No jpg images found in that directory.")
+            MainController.display_message_box(QMessageBox.Warning, "Warning", "No jpg images found in that directory.")
             return
         self.reset_model()
         self._model.images_directory = dir
         self._model.images = images
-        self._model.predict_images()
+        self._model.images_ready_signal.emit(self._model.images)
 
     def load_files(self):
         files = QFileDialog.getOpenFileUrls(None, "Select .jpg files")
@@ -41,6 +41,12 @@ class MainController(QObject):
                 images.append(meta)
         self.reset_model()
         self._model.images = images
+        self._model.predict_images()
+
+    def predict(self):
+        if self._model.images_directory == '':
+            MainController.display_message_box(QMessageBox.Warning, "Error", "Load images first")
+            return
         self._model.predict_images()
 
     def reset_model(self):

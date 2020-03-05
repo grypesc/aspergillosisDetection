@@ -35,6 +35,7 @@ class MainView(QMainWindow):
         self._model.reset_signal.connect(self.on_model_reset)
         # listeners of table events
         self._ui.tableWidget.itemClicked.connect(self.on_item_clicked)
+        self._ui.predictButton.clicked.connect(self.on_predict_clicked)
 
     def on_images_ready(self, value):
         self._ui.tableWidget.setRowCount(len(self._model.images))
@@ -42,6 +43,9 @@ class MainView(QMainWindow):
             self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(image.name))
             self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(image.diagnosis))
             self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(image.probability)))
+
+    def on_predict_clicked(self):
+        self._main_controller.predict()
 
     def on_item_clicked(self, value):
         pixmap = QPixmap(os.path.join(self._model.images_directory, self._model.images[value.row()].name), )

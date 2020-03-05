@@ -1,5 +1,5 @@
 class ImageMetaData():
-    def __init__(self, nameArg, diagArg, probArg):
-        self.name = nameArg
-        self.diagnosis = diagArg
-        self.probability = probArg
+    def __init__(self, name, diag, prob):
+        self.name = name
+        self.diagnosis = diag
+        self.probability = prob
