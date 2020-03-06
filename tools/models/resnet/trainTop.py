@@ -19,8 +19,7 @@ validationData = np.loadtxt('resnet_validation.csv', delimiter=",")
 
 model = Sequential()
 
-model.add(Dense(2048, activation='relu', input_shape=(2048,)))
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(3, activation='softmax', input_shape=(2048,)))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',

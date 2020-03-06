@@ -7,37 +7,38 @@ from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 from keras.callbacks.callbacks import ModelCheckpoint
 
-trainData = np.loadtxt('mobileNetV2_train.csv', delimiter=",")
-s = np.arange(trainData.shape[0])
+train_data = np.loadtxt('mobileNetV2_train.csv', delimiter=",")
+s = np.arange(train_data.shape[0])
 np.random.shuffle(s)
-trainData = trainData[s]
+train_data = train_data[s]
 
-labels = trainData[:, -1]
-labels = to_categorical(labels, num_classes=3)
+validation_data = np.loadtxt('mobileNetV2_validation.csv', delimiter=",")
 
-validationData = np.loadtxt('mobileNetV2_validation.csv', delimiter=",")
 
 model = Sequential()
-model.add(Dense(1280, activation='relu'))
+
+model.add(Dense(1280, activation='relu', kernel_initializer='he_normal', input_shape=(1280,)))
 model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu', kernel_initializer='he_normal'))
 model.add(Dropout(0.2))
-model.add(Dense(256, activation='relu'))
+model.add(Dense(256, activation='relu', kernel_initializer='he_normal'))
+model.add(Dropout(0.2))
+model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
 model.add(Dropout(0.2))
 model.add(Dense(3, activation='softmax'))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=Adam(lr=1e-5),
+              optimizer=Adam(lr=200e-6),
               metrics=['acc'])
 
 history = model.fit(
-    x=trainData[:, :-1],
-    y=labels,
-    epochs=100,
-    batch_size=512,
-    validation_data=(validationData[:, :-1], to_categorical(validationData[:, -1], num_classes=3)),
-    callbacks=[ModelCheckpoint("mobileNetV2Top{val_loss:.4f}_{val_acc:.4f}.h5", save_best_only=True, monitor='val_loss',
+    x=train_data[:, :-1],
+    y=to_categorical(train_data[:, -1], num_classes=3),
+    epochs=250,
+    batch_size=1024,
+    validation_data=(validation_data[:, :-1], to_categorical(validation_data[:, -1], num_classes=3)),
+    callbacks=[ModelCheckpoint("mobileNetV2Top{val_acc:.4f}_{val_loss:.4f}.h5", save_best_only=True, monitor='val_loss',
                                verbose=0, mode='auto', period=1)],
     verbose=2)
 

@@ -1,32 +1,21 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import os
-import pydicom
 import sys
 np.set_printoptions(threshold=sys.maxsize)
 
 from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
-folderFungus = '../../data/fungus'
-folderNoFungus = '../../data/noFungus'
-folderNoLungs = '../../data/noLungs'
-folderTest = '../../data/test'
+model = load_model('mobilenetV2/amobileNetV2Top0.3484_0.8699.h5')
 
-fungusImages, noFungusImages = 0, 0
-for dirpath, subdirs, files in os.walk(folderTest):
-    fungusImages += len(files)
-print("Number of test fungus images: " + str(fungusImages))
-
-testX = np.zeros(shape=(fungusImages,512, 512, 1), dtype = "float16")
-
-index = 0
-for dirpath, subdirs, files in os.walk(folderTest):
-    for file in files[:]:
-        testX[index] = pydicom.read_file(dirpath + "/" + file).pixel_array.reshape(512,512,1)
-        index+=1
-
-testX /= 2048
+test_X = np.zeros(shape=(len(self._images), 512, 512, 3), dtype="float32")
+for index in range(0, len(self.images)):
+    img = image.load_img(os.path.join(self._images_directory, self.images[index].name),
+                         target_size=(512, 512, 3))
+    test_X[index] = image.img_to_array(img)
+print(test_X[0, 200])
+test_X = preprocess_input(test_X)
+predictions = self._model.predict(test_X, verbose=1)
 
 testY = np.ones(testX.shape[0])
 testY = to_categorical(testY, num_classes= 2)

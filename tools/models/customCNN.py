@@ -24,21 +24,19 @@ validGenerator = validImageDataGen.flow_from_directory(
     class_mode='categorical',
     color_mode='grayscale')
 
-
-
 model = Sequential()
 model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 1)))
-model.add(Conv2D(64, kernel_size=(3, 3),padding = "valid", strides = 2, input_shape=(312, 312, 1), activation= 'relu'))
-model.add(MaxPool2D(pool_size = (2, 2)))
+model.add(Conv2D(64, kernel_size=(3, 3), padding="valid", strides=2, input_shape=(312, 312, 1), activation='relu'))
+model.add(MaxPool2D(pool_size=(3, 3)))
 
-model.add(Conv2D(32, kernel_size=(3, 3), padding = "valid", strides = 2, activation ='relu'))
-model.add(MaxPool2D(pool_size = (2, 2)))
+model.add(Conv2D(32, kernel_size=(3, 3), padding="valid", strides=2, activation='relu'))
+model.add(MaxPool2D(pool_size=(2, 2)))
 
-model.add(Conv2D(16, kernel_size=(3, 3), padding = "valid", strides = 2, activation ='relu'))
-model.add(MaxPool2D(pool_size = (2, 2)))
+model.add(Conv2D(16, kernel_size=(3, 3), padding="valid", strides=2, activation='relu'))
+model.add(MaxPool2D(pool_size=(2, 2)))
 
 model.add(Flatten())
-model.add(Dense(32, activation='relu'))
+model.add(Dense(100, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 model.summary()
 
@@ -48,11 +46,11 @@ model.compile(loss='categorical_crossentropy',
 
 history = model.fit_generator(
     trainGenerator,
-    epochs=5,
+    epochs=50,
     validation_data=validGenerator,
     verbose=2)
 
-model.save("../../app/resources/models/lol.h5")
+# model.save("../../app/resources/models/lol.h5")
 
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])

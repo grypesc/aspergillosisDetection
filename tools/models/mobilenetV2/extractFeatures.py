@@ -24,13 +24,11 @@ model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 4
 preprocessingFunctions = [preprocess_input]
 
 for preprocessingFunction in preprocessingFunctions:
-    imageDataGen = ImageDataGenerator(preprocessing_function=preprocessingFunction, width_shift_range=25, height_shift_range=25, rotation_range=20, brightness_range=[0.75, 1.25], shear_range=10)
-
+    imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30, height_shift_range=30, rotation_range=15, brightness_range=[0.9, 1.1], shear_range=5)
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
         target_size=(512, 512),
         batch_size=32,
-        shuffle=True,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 0)
@@ -40,16 +38,15 @@ for preprocessingFunction in preprocessingFunctions:
         '../../../data/train/fungus',
         target_size=(512, 512),
         batch_size=32,
-        shuffle=True,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 1)
     np.savetxt(file, np.append(features, labels, axis=1), delimiter=",")
+
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notLungs',
         target_size=(512, 512),
         batch_size=32,
-        shuffle=True,
         class_mode=None)
     features = model.predict_generator(generator, verbose=1)
     labels = np.full((features.shape[0], 1), 2)
@@ -66,7 +63,6 @@ generator = imageDataGen.flow_from_directory(
     '../../../data/valid/notFungus',
     target_size=(512, 512),
     batch_size=32,
-    shuffle=True,
     class_mode=None)
 features = model.predict_generator(generator, verbose=1)
 labels = np.full((features.shape[0], 1), 0)
@@ -76,7 +72,6 @@ generator = imageDataGen.flow_from_directory(
     '../../../data/valid/fungus',
     target_size=(512, 512),
     batch_size=32,
-    shuffle=True,
     class_mode=None)
 features = model.predict_generator(generator, verbose=1)
 labels = np.full((features.shape[0], 1), 1)
