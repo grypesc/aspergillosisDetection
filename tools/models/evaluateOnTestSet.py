@@ -1,27 +1,54 @@
 import numpy as np
 import os
 import sys
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
 np.set_printoptions(threshold=sys.maxsize)
 
 from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
-model = load_model('mobilenetV2_is_fungus/amobileNetV2Top0.3484_0.8699.h5')
+model = load_model('../../app/resources/models/test.h5')
 
-test_X = np.zeros(shape=(len(self._images), 512, 512, 3), dtype="float32")
-for index in range(0, len(self.images)):
-    img = image.load_img(os.path.join(self._images_directory, self.images[index].name),
-                         target_size=(512, 512, 3))
-    test_X[index] = image.img_to_array(img)
-print(test_X[0, 200])
-test_X = preprocess_input(test_X)
-predictions = self._model.predict(test_X, verbose=1)
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
+generator = imageDataGen.flow_from_directory(
+    '../../data/test/fungus',
+    target_size=(512, 512),
+    batch_size=32,
+    class_mode=None)
+fungusPreds = model.predict_generator(generator, verbose=1)
 
-testY = np.ones(testX.shape[0])
-testY = to_categorical(testY, num_classes= 2)
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
+generator = imageDataGen.flow_from_directory(
+    '../../data/test/notFungus',
+    target_size=(512, 512),
+    batch_size=32,
+    class_mode=None)
+notFungusPreds = model.predict_generator(generator, verbose=1)
 
-model = load_model('../../app/resources/models/example.h5')
-yPredictions = model.predict(x=testX, batch_size=32, verbose=1)
-print(yPredictions)
-accuracy = np.sum(yPredictions[:,1])/fungusImages
-print(accuracy)
+TP, FP, FN, TN = 0, 0, 0, 0
+for index, prediction in enumerate(fungusPreds, start=0):
+    if prediction[0] >= 0.5:
+        TP += 1
+FN = len(fungusPreds) - TP
+
+for index, prediction in enumerate(notFungusPreds, start=0):
+    if prediction[0] < 0.5:
+        TN += 1
+FP = len(notFungusPreds) - TN
+
+print (str(TP) + '   ' + str(FP))
+print (str(FN) + '   ' + str(TN))
+
+accuracy = (TP+TN)/(len(fungusPreds) + len(notFungusPreds))
+recall = TP / len(fungusPreds)
+precision = TP/(TP + FP)
+f1 = 2 * precision * recall / (precision + recall)
+
+print ("Accuracy: " + str(accuracy))
+print ("Recall: " + str(recall))
+print ("Precision: " + str(precision))
+print ("F1 Score: " + str(f1))
+
