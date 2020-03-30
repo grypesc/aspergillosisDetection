@@ -29,6 +29,7 @@ class MainController(QObject):
         self._model.images = images
         self._model.images_ready_signal.emit(self._model.images)
 
+
     def load_files(self):
         files = QFileDialog.getOpenFileUrls(None, "Select .jpg files")
         files = [file.path() for file in files[0]]

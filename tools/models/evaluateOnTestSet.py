@@ -6,7 +6,7 @@ np.set_printoptions(threshold=sys.maxsize)
 from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
-model = load_model('mobilenetV2/amobileNetV2Top0.3484_0.8699.h5')
+model = load_model('mobilenetV2_is_fungus/amobileNetV2Top0.3484_0.8699.h5')
 
 test_X = np.zeros(shape=(len(self._images), 512, 512, 3), dtype="float32")
 for index in range(0, len(self.images)):

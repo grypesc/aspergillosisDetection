@@ -1,4 +1,4 @@
-from keras.applications.vgg16 import VGG16
+from keras.applications.mobilenet_v2 import MobileNetV2
 from keras.models import Sequential, Model, load_model
 from keras.layers import Cropping2D
 from keras.preprocessing.image import ImageDataGenerator
@@ -6,9 +6,10 @@ from keras.preprocessing.image import ImageDataGenerator
 
 model = Sequential()
 model.add(Cropping2D(cropping=((50, 50), (50, 50)), input_shape=(512, 512, 3)))
-model.add(VGG16(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg'))
-model.add(load_model('xceptionTop0.5376_0.7558.h5'))
-model.save("../../../app/resources/models/xceptionTop0.5653_0.7807.h5")
+model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg'))
+model.add(load_model('mobileNetV2Top0.9330_0.3482.h5'))
+model.summary()
+model.save("../../../app/resources/models/amobileNetV2Top0.9330_0.3482.h5")
 
 # validImageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 # validGenerator = validImageDataGen.flow_from_directory(

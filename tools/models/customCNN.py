@@ -8,35 +8,38 @@ from keras.utils.np_utils import to_categorical
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 
-trainImageDataGen = ImageDataGenerator(horizontal_flip=False)
+from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
+
+trainImageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30,
+                                       height_shift_range=30, rotation_range=20, brightness_range=[0.90, 1.10],
+                                       shear_range=5, fill_mode='constant', cval=0, zoom_range=0.05,
+                                       horizontal_flip=True)
 trainGenerator = trainImageDataGen.flow_from_directory(
     '../../data/train',
     target_size=(512, 512),
     batch_size=64,
-    class_mode='categorical',
-    color_mode='grayscale')
+    class_mode='categorical')
 
 validImageDataGen = ImageDataGenerator()
 validGenerator = validImageDataGen.flow_from_directory(
     '../../data/valid',
     target_size=(512, 512),
     batch_size=64,
-    class_mode='categorical',
-    color_mode='grayscale')
+    class_mode='categorical')
+
+modelMobile = MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg')
+# modelMobile = Model(modelMobile.input, modelMobile.layers[26].output)
+modelMobile.summary()
+exit()
 
 model = Sequential()
-model.add(Cropping2D(cropping=((100, 100), (100, 100)), input_shape=(512, 512, 1)))
-model.add(Conv2D(64, kernel_size=(3, 3), padding="valid", strides=2, input_shape=(312, 312, 1), activation='relu'))
-model.add(MaxPool2D(pool_size=(3, 3)))
-
-model.add(Conv2D(32, kernel_size=(3, 3), padding="valid", strides=2, activation='relu'))
-model.add(MaxPool2D(pool_size=(2, 2)))
-
-model.add(Conv2D(16, kernel_size=(3, 3), padding="valid", strides=2, activation='relu'))
-model.add(MaxPool2D(pool_size=(2, 2)))
+model.add(Cropping2D(cropping=((50, 50), (50, 50)), input_shape=(512, 512, 3)))
+model.add(modelMobile)
+for l in model.layers:
+    l.trainable = False
 
 model.add(Flatten())
-model.add(Dense(100, activation='relu'))
+# model.add(Dense(100, activation='relu'))
 model.add(Dense(3, activation='softmax'))
 model.summary()
 

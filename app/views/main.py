@@ -44,7 +44,11 @@ class MainView(QMainWindow):
         for index, image in enumerate(self._model.images, start=0):
             self._ui.tableWidget.setItem(index, 0, QTableWidgetItem(image.name))
             self._ui.tableWidget.setItem(index, 1, QTableWidgetItem(image.diagnosis))
-            self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(image.probability)))
+            if isinstance(image.probability, str):
+                self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(''))
+            else:
+                self._ui.tableWidget.setItem(index, 2, QTableWidgetItem(str(round(image.probability, 3))))
+
 
     def on_predict_clicked(self):
         self._main_controller.predict()
