@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
 from keras.callbacks.callbacks import ModelCheckpoint
 
-train_data = np.loadtxt('mobileNetV2_train.csv', delimiter=",")
+train_data = np.loadtxt('mobileNetV2_train_#1.csv', delimiter=",")
 s = np.arange(train_data.shape[0])
 np.random.shuffle(s)
 
@@ -20,7 +20,7 @@ train_data = train_data[s]
 train_X = train_data[:, :-1]
 
 
-validation_data = np.loadtxt('mobileNetV2_validation.csv', delimiter=",")
+validation_data = np.loadtxt('mobileNetV2_validation_#1.csv', delimiter=",")
 
 # pca = PCA(n_components=800)
 # pca = pca.fit(train_X)
@@ -50,7 +50,7 @@ history = model.fit(
     epochs=150,
     batch_size=1024,
     validation_data=(validation_data[:, :-1], validation_data[:, -1]),
-    callbacks=[ModelCheckpoint("mobileNetV2Top_is_fungus_{val_acc:.4f}_{val_loss:.4f}.h5", save_best_only=False, monitor='val_acc',
+    callbacks=[ModelCheckpoint("mobileNetV2Top_is_fungus_{val_loss:.4f}_{val_acc:.4f}.h5", save_best_only=False, monitor='val_acc',
                                verbose=0, mode='auto', period=1)],
     verbose=2)
 

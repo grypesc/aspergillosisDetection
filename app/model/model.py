@@ -38,7 +38,7 @@ class Model(QObject):
         self._extracting_model = None
         self._is_lungs_model_name = 'mobileNetV2Top_is_lungs_0.9901_0.0420.h5'
         self._is_lungs_model = None
-        self._is_fungus_model_name = 'mobileNetV2Top_is_fungus_0.8820_0.3384.h5'
+        self._is_fungus_model_name = 'amobileNetV2Top_is_fungus_0.3828_0.8363.h5'
         self._is_fungus_model = None
 
     def predict_images(self):

@@ -16,7 +16,9 @@ def flipAndPreprocess(x):
 preprocessingFunctions = [flipAndPreprocess]
 
 for preprocessingFunction in preprocessingFunctions:
-    imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
+    imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30, height_shift_range=30,
+                                  rotation_range=10, brightness_range=[0.90, 1.10],
+                                  shear_range=5, fill_mode='constant', cval=0, zoom_range=0.05)
 
     generator = imageDataGen.flow_from_directory(
         '../../data/train/fungus/',

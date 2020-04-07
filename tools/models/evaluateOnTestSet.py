@@ -1,16 +1,22 @@
 import numpy as np
-import os
 import sys
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, MobileNetV2
+
+from tensorflow.keras.models import Sequential, Model, load_model
+from tensorflow.keras.layers import Cropping2D
 
 np.set_printoptions(threshold=sys.maxsize)
 
-from keras.models import load_model
 from keras.utils.np_utils import to_categorical
 
-model = load_model('../../app/resources/models/test.h5')
+
+
+model = Sequential()
+model.add(Cropping2D(cropping=((50, 50), (50, 50)), input_shape=(512, 512, 3)))
+model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg'))
+model.add(load_model('mobilenetV2_is_fungus/mobileNetV2Top_is_fungus_0.5402_0.7581.h5'))
 
 imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
 generator = imageDataGen.flow_from_directory(
