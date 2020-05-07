@@ -28,7 +28,7 @@ validGenerator = validImageDataGen.flow_from_directory(
     class_mode='categorical')
 
 modelMobile = MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg')
-# modelMobile = Model(modelMobile.input, modelMobile.layers[26].output)
+# modelMobile = Model(modelMobile.input, modelMobile.layers[29].output)
 modelMobile.summary()
 exit()
 

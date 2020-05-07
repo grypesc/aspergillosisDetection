@@ -15,7 +15,7 @@ def flipAndPreprocess(x):
 
 if os.path.isfile('mobileNetV2_train.csv'):
     os.remove("mobileNetV2_train.csv")
-file = open('mobileNetV2_train.csv', 'a')
+file = open('mobileNetV2_train_#5.csv', 'a')
 
 model = Sequential()
 model.add(Cropping2D(cropping=((50, 50), (50, 50)), input_shape=(512, 512, 3)))
@@ -26,8 +26,11 @@ for l in model.layers:
 preprocessingFunctions = [preprocess_input]
 
 for preprocessingFunction in preprocessingFunctions:
-    imageDataGen = ImageDataGenerator(preprocessing_function=preprocessingFunction, width_shift_range=40, height_shift_range=40, rotation_range=20, brightness_range=[0.90, 1.10],
-                                      shear_range=5, fill_mode='constant', cval=0, zoom_range=0.1)
+    imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30,
+                                      height_shift_range=30,
+                                      rotation_range=20, brightness_range=[0.90, 1.10],
+                                      shear_range=10, fill_mode='constant', cval=0, zoom_range=0.075,
+                                      horizontal_flip=True)
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
         target_size=(512, 512),
@@ -50,11 +53,13 @@ for preprocessingFunction in preprocessingFunctions:
 
 if os.path.isfile('mobileNetV2_validation.csv'):
     os.remove("mobileNetV2_validation.csv")
-file = open('mobileNetV2_validation.csv', 'a')
+file = open('mobileNetV2_validation_#5.csv', 'a')
 
-# imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input)
-imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30, height_shift_range=30, rotation_range=15, brightness_range=[0.90, 1.10],
-                                      shear_range=3, fill_mode='constant', cval=0, zoom_range=0.05)
+
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30,
+                                  height_shift_range=30,
+                                  rotation_range=20, brightness_range=[0.90, 1.10],
+                                  shear_range=10, fill_mode='constant', cval=0, zoom_range=0.075, horizontal_flip=True)
 generator = imageDataGen.flow_from_directory(
     '../../../data/valid/notFungus',
     target_size=(512, 512),

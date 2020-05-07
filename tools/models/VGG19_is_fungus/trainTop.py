@@ -35,24 +35,26 @@ validation_X = validation_data[:, :-1]
 # print(tree.score(validation_X, validation_data[:, -1]))
 # exit()
 model = Sequential()
-model.add(Dense(100, activation='relu', kernel_initializer='he_uniform', input_shape=(512,)))
-model.add(Dropout(0.2))
-model.add(Dense(30, activation='relu', kernel_initializer='he_uniform'))
+
+model.add(Dense(128, activation='relu', kernel_initializer='he_uniform', input_shape=(512,), kernel_regularizer=regularizers.l2(0.1), bias_regularizer=regularizers.l2(0.1)))
+model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu', kernel_initializer='he_uniform'))
+
 
 model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
 model.compile(loss='binary_crossentropy',
-              optimizer=Adam(lr=200e-6),
+              optimizer=Adam(lr=100e-6),
               metrics=['acc'])
 
 history = model.fit(
     x=train_X,
     y=train_data[:, -1],
-    epochs=150,
-    batch_size=1024,
+    epochs=100,
+    batch_size=256,
     validation_data=(validation_X, validation_data[:, -1]),
-    # callbacks=[ModelCheckpoint("vgg19_is_fungus_{val_acc:.4f}_{val_loss:.4f}.h5", save_best_only=True, monitor='val_acc',
+    # callbacks=[ModelCheckpoint("vgg19_is_fungus_{val_acc:.4f}_{val_loss:.4f}_{epoch:02d}.h5", save_best_only=True, monitor='acc',
     #                            verbose=0, mode='auto', period=1)],
     verbose=2)
 

@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
 from keras.callbacks.callbacks import ModelCheckpoint
 
-train_data = np.loadtxt('vgg19_train.csv', delimiter=",")
+train_data = np.loadtxt('resnet50_train.csv', delimiter=",")
 s = np.arange(train_data.shape[0])
 np.random.shuffle(s)
 
@@ -20,10 +20,10 @@ train_data = train_data[s]
 train_X = train_data[:, :-1]
 
 
-validation_data = np.loadtxt('vgg19_validation.csv', delimiter=",")
+validation_data = np.loadtxt('resnet50_validation.csv', delimiter=",")
 validation_X = validation_data[:, :-1]
 
-# pca = PCA(n_components=800)
+# pca = PCA(n_components=10)
 # pca = pca.fit(train_X)
 # train_X = pca.transform(train_X)
 # validation_X = pca.transform(validation_data[:, :-1])
@@ -35,12 +35,12 @@ validation_X = validation_data[:, :-1]
 # print(tree.score(validation_X, validation_data[:, -1]))
 # exit()
 model = Sequential()
-model.add(Dense(100, activation='relu', kernel_initializer='he_uniform', input_shape=(512,)))
-model.add(Dropout(0.2))
-model.add(Dense(20, activation='relu', kernel_initializer='he_uniform'))
+model.add(Dense(50, activation='relu', kernel_initializer='he_uniform', input_shape=(2048,)))
+model.add(Dropout(0.5))
+model.add(Dense(15, activation='relu', kernel_initializer='he_uniform'))
 
 
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid', input_shape=(2048,)))
 model.summary()
 
 model.compile(loss='binary_crossentropy',
@@ -51,10 +51,10 @@ history = model.fit(
     x=train_X,
     y=train_data[:, -1],
     epochs=150,
-    batch_size=1024,
+    batch_size=256,
     validation_data=(validation_X, validation_data[:, -1]),
-    # callbacks=[ModelCheckpoint("vgg19_is_fungus_{val_acc:.4f}_{val_loss:.4f}.h5", save_best_only=True, monitor='val_acc',
-    #                            verbose=0, mode='auto', period=1)],
+    callbacks=[ModelCheckpoint("resnet50_is_fungus_{val_loss:.4f}_{val_acc:.4f}_.h5", save_best_only=True, monitor='val_acc',
+                               verbose=0, mode='auto', period=1)],
     verbose=2)
 
 plt.plot(history.history['acc'])
