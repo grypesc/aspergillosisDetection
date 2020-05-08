@@ -2,12 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from keras.layers import Cropping2D
-from keras.models import load_model
-from keras.preprocessing import image
-from keras.applications.mobilenet_v2 import preprocess_input, MobileNetV2
+from tensorflow.keras.layers import Cropping2D
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, MobileNetV2
 from PyQt5.QtCore import QObject, pyqtSignal
-from keras.models import Sequential
+from tensorflow.keras.models import Sequential
+
 
 class Model(QObject):
     images_ready_signal = pyqtSignal(list)
@@ -57,7 +58,8 @@ class Model(QObject):
         if self._extracting_model is None:
             self._extracting_model = Sequential()
             self._extracting_model.add(Cropping2D(cropping=((50, 50), (50, 50)), input_shape=(512, 512, 3)))
-            self._extracting_model.add(MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg'))
+            self._extracting_model.add(
+                MobileNetV2(weights='imagenet', include_top=False, input_shape=(412, 412, 3), pooling='avg'))
         features = self._extracting_model.predict(test_X, verbose=1)
 
         is_lungs_predictions = self._is_lungs_model.predict(features)

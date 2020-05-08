@@ -3,7 +3,7 @@ import os
 
 from controllers.main import MainController
 
-from keras.preprocessing import image
+from tensorflow.keras.preprocessing import image
 from mayavi import mlab
 from mayavi.tools.helper_functions import volume_slice
 from PyQt5.QtCore import QObject
