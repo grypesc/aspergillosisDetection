@@ -1,18 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from keras import regularizers
+from tensorflow.keras import regularizers
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adam
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.optimizers import Adam
 import numpy as np
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
-from keras.callbacks.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint
 
-train_data = np.loadtxt('mobileNetV2_train_#.csv', delimiter=",")
+train_data = np.loadtxt('mobileNetV2_train_#5.csv', delimiter=",")
 s = np.arange(train_data.shape[0])
 np.random.shuffle(s)
 
@@ -20,7 +19,7 @@ train_data = train_data[s]
 train_X = train_data[:, :-1]
 
 
-validation_data = np.loadtxt('mobileNetV2_validation_1.csv', delimiter=",")
+validation_data = np.loadtxt('mobileNetV2_validation_#5.csv', delimiter=",")
 validation_X = validation_data[:, :-1]
 
 # pca = PCA(n_components=80)
@@ -34,14 +33,18 @@ validation_X = validation_data[:, :-1]
 # print(tree.score(validation_X, validation_data[:, -1]))
 # exit()
 model = Sequential()
-# model.add(Dropout(0.5, input_shape=(1280,)))
-# model.add(Dense(32, activation='relu', kernel_initializer='he_uniform', input_shape=(1280,), kernel_regularizer=regularizers.l2(0.01), bias_regularizer=regularizers.l2(0.01)))
-# model.add(Dropout(0.5))
-model.add(Dense(50, activation='relu', kernel_initializer='he_uniform', input_shape=(1280,), kernel_regularizer=regularizers.l2(0.0), bias_regularizer=regularizers.l2(0.0)))
+
+model.add(Dense(500, activation='relu', kernel_initializer='he_normal', kernel_regularizer=regularizers.l2(0.01),
+                bias_regularizer=regularizers.l2(0.01)))
 model.add(Dropout(0.5))
-model.add(Dense(15, activation='relu', kernel_initializer='he_uniform', kernel_regularizer=regularizers.l2(0.0), bias_regularizer=regularizers.l2(0.0)))
+model.add(Dense(300, activation='relu', kernel_initializer='he_normal', kernel_regularizer=regularizers.l2(0.01),
+                bias_regularizer=regularizers.l2(0.01)))
+model.add(Dropout(0.5))
+model.add(Dense(100, activation='relu', kernel_initializer='he_normal', kernel_regularizer=regularizers.l2(0.01),
+                bias_regularizer=regularizers.l2(0.01)))
+
 model.add(Dense(1, activation='sigmoid'))
-model.summary()
+
 
 model.compile(loss='binary_crossentropy',
               optimizer=Adam(lr=100e-6),
@@ -53,8 +56,8 @@ history = model.fit(
     epochs=150,
     batch_size=1024,
     validation_data=(validation_X, validation_data[:, -1]),
-    # callbacks=[ModelCheckpoint("mobileNetV2Top_is_fungus_{val_loss:.4f}_{val_acc:.4f}_{epoch:02d}.h5", save_best_only=False, monitor='val_acc',
-    #                            verbose=0, mode='auto', period=1)],
+    callbacks=[ModelCheckpoint("mobileNetV2Top_is_fungus_{val_acc:.4f}_{acc:.4f}_{epoch:02d}.h5", save_best_only=False, monitor='acc',
+                               verbose=0, mode='auto', period=1)],
     verbose=2)
 
 plt.plot(history.history['acc'])

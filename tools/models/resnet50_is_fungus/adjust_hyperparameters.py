@@ -1,30 +1,27 @@
-import matplotlib.pyplot as plt
 import numpy as np
-from keras import regularizers
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.utils.np_utils import to_categorical
-from keras.optimizers import Adam
-import numpy as np
+from tensorflow.keras import regularizers
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.optimizers import Adam
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.decomposition import PCA
-from keras.callbacks.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 results = {}
 for i in range(1, 6):
     results[i] = []
 
 for i in range(1, 6):
-    train_data = np.loadtxt('mobileNetV2_train_#' + str(i) + '.csv', delimiter=",")
+    train_data = np.loadtxt('resnet50_train_#' + str(i) + '.csv', delimiter=",")
     s = np.arange(train_data.shape[0])
     np.random.shuffle(s)
 
     train_data = train_data[s]
     train_X = train_data[:, :-1]
 
-    validation_data = np.loadtxt('mobileNetV2_validation_#' + str(i) + '.csv', delimiter=",")
+    validation_data = np.loadtxt('resnet50_validation_#' + str(i) + '.csv', delimiter=",")
     validation_X = validation_data[:, :-1]
 
     # pca = PCA(n_components=80)
@@ -41,16 +38,21 @@ for i in range(1, 6):
     # model.add(Dropout(0.5, input_shape=(1280,)))
     # model.add(Dense(1280, activation='relu', kernel_initializer='he_uniform', input_shape=(1280,), kernel_regularizer=regularizers.l2(0.1), bias_regularizer=regularizers.l2(0.1)))
     # model.add(Dropout(0.5))
-    model.add(Dense(4096, activation='relu', kernel_initializer='glorot_uniform', input_shape=(1280,), kernel_regularizer=regularizers.l2(0.05), bias_regularizer=regularizers.l2(0.05)))
+    # model.add(Dense(4096, activation='relu', kernel_initializer='glorot_uniform', input_shape=(2048,), kernel_regularizer=regularizers.l2(0.05), bias_regularizer=regularizers.l2(0.05)))
+    #
+    model.add(Dense(2048, activation='relu', kernel_initializer='he_normal', kernel_regularizer=regularizers.l2(0.01),
+                    bias_regularizer=regularizers.l2(0.01)))
     model.add(Dropout(0.5))
-    model.add(Dense(20, activation='relu', kernel_initializer='glorot_uniform', kernel_regularizer=regularizers.l2(0.05), bias_regularizer=regularizers.l2(0.05)))
+
+    model.add(Dense(2048, activation='relu', kernel_initializer='he_normal', kernel_regularizer=regularizers.l2(0.01),
+                    bias_regularizer=regularizers.l2(0.01)))
+
 
 
     model.add(Dense(1, activation='sigmoid'))
-    # model.summary()
 
     model.compile(loss='binary_crossentropy',
-                  optimizer=Adam(lr=200e-6),
+                  optimizer=Adam(lr=150e-6),
                   metrics=['acc'])
 
     history = model.fit(

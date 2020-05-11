@@ -28,8 +28,8 @@ preprocessingFunctions = [preprocess_input]
 for preprocessingFunction in preprocessingFunctions:
     imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30,
                                       height_shift_range=30,
-                                      rotation_range=360, brightness_range=[0.90, 1.10],
-                                      shear_range=5, fill_mode='constant', cval=0, zoom_range=0.05,
+                                      rotation_range=20, brightness_range=[0.90, 1.10],
+                                      shear_range=8, fill_mode='constant', cval=0, zoom_range=0.075,
                                       horizontal_flip=True)
     generator = imageDataGen.flow_from_directory(
         '../../../data/train/notFungus',
@@ -55,10 +55,11 @@ if os.path.isfile('resnet50_validation.csv'):
     os.remove("resnet50_validation.csv")
 file = open('resnet50_validation.csv', 'a')
 
-imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=20,
-                                  height_shift_range=20,
-                                  rotation_range=10, brightness_range=[0.90, 1.10],
-                                  shear_range=5, fill_mode='constant', cval=0, zoom_range=0.05, horizontal_flip=True)
+imageDataGen = ImageDataGenerator(preprocessing_function=preprocess_input, width_shift_range=30,
+                                  height_shift_range=30,
+                                  rotation_range=20, brightness_range=[0.90, 1.10],
+                                  shear_range=8, fill_mode='constant', cval=0, zoom_range=0.075,
+                                  horizontal_flip=True)
 generator = imageDataGen.flow_from_directory(
     '../../../data/valid/notFungus',
     target_size=(512, 512),
